@@ -1,0 +1,53 @@
+# krn-fml-001-core-interface-v0.2.yaml
+# Status: READY_FOR_LOCAL_CONTRACT_BINDING
+# reconstruction_risk: low
+# This is a core Formula Contract boundary, not a formula profile.
+
+tool_id: KRN-FML-001
+interface_version: "fenrua-521-fml-001/v0.2"
+formula_contract_version: "fenrua-521-formula-contract/v1"
+classification: amber_local_only
+
+input_schema:
+  formula_id: "registered core Formula Contract identifier"
+  version: "candidate-bound Formula Contract version"
+  public_inputs: "typed, bounded input object"
+
+output_schema:
+  disposition: VERIFIED | REJECTED | INSUFFICIENT_EVIDENCE
+  reason_code: string
+  receipt_digest: "sha256:..."
+  formula_id: string
+  version: string
+  public_result: "optional boolean or digest only"
+
+registered_formula_ids:
+  - F521-KEY-001
+  - F521-ID-001
+  - F521-EVENT-001
+  - F521-P521-001
+  - F521-NN-001
+  - F521-INGRESS-001
+  - F521-LEDGER-001
+  - F521-EPOCH-001
+  - F521-INCLUSION-001
+
+required_contract_fields:
+  - formula_contract_version
+  - formula_id
+  - version
+  - source_id
+  - source_digest
+  - contract_digest
+  - disclosure_class
+  - local_verifier
+
+rules:
+  - Only registered formula_id values may be resolved.
+  - An absent, malformed, mismatched, or unapproved Formula Contract returns INSUFFICIENT_EVIDENCE.
+  - The local verifier receives typed public_inputs but only returns a boolean or digest-shaped public_result.
+  - The tool never returns canonical formula text, domain bindings, private witnesses, keys, or production parameters.
+  - Every invocation emits a bounded receipt with input, source, and contract digests only.
+  - No VERIFIED result may be created from prose, a generic mathematical profile, or a toy vector.
+
+unbound_contract_disposition: INSUFFICIENT_EVIDENCE

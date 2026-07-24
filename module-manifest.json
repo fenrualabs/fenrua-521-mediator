@@ -61,6 +61,20 @@
     "profile_sha256": "sha256:e3afcce93b9681e864efcaad591f0e411e3caed5b56d50119ad4337679e782f4",
     "terminal_receipt_rule": "Receipts require accepted intake with an approved binding. A verified receipt requires all four prior stages; contained or refused receipts may follow a terminal result from any completed post-intake stage."
   },
+  "formula_interface": {
+    "id": "KRN-FML-001",
+    "file": "formula/krn-fml-001-core-interface-v0.2.yaml",
+    "version": "fenrua-521-fml-001/v0.2",
+    "source_attachment_sha256": "sha256:f2cb72eb718c61feb084b1872985a7df3d1a34877aa95343b475130e8001a7ff",
+    "interface_sha256": "sha256:0a6a14a790aaa74ecd2305bdc973e419fbf1632c8f9bce7c26b9c7f56ef10d23",
+    "implementation_sha256": "sha256:59352077231a245f20fbdd9f94c90e98f66d362da5d25315a278c9997fbd6973",
+    "classification": "amber_local_only",
+    "contract_binding_status": "NO_APPROVED_FORMULA_CONTRACT_BOUND",
+    "normalizations": [
+      "The supplied toy arithmetic is not used as a core or production Formula Contract.",
+      "A VERIFIED result requires a matching local Amber Formula Contract, version, source digest, contract digest, and verifier."
+    ]
+  },
   "fixture_assets": {
     "eval_01_to_05": {
       "file": "fixtures/green/fenrua-521-eval-01-to-05-complete-v0.2.yaml",
@@ -129,6 +143,7 @@
     "network_egress": "forbidden",
     "model_endpoint_calling": "not implemented",
     "raw_input_persistence": "not implemented",
+    "formula_contract_resolution": "local Amber Formula Contract only; no production profile is bound",
     "human_authority_required": true
   }
 }

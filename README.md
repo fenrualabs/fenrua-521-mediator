@@ -39,3 +39,8 @@ node bin/run-green-baseline.mjs
 The runner writes `evidence/baselines/fenrua-521-first-deterministic-baseline-v0.1.json`.
 It processes fixture metadata through the five KRN stages and records only
 bounded case metadata and receipts—never fixture prompt text.
+
+`KRN-FML-001` is a core Formula Contract boundary. It has no embedded
+production mathematics: a Formula Contract must be locally bound with a
+matching source digest, contract digest, version, and local Amber verifier
+before the interface can emit `VERIFIED`.
