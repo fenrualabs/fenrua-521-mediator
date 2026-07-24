@@ -146,3 +146,36 @@ cross-tenant, and injection cases were successfully terminated by the
 mediator before the engine ran; that is a boundary result, not a claim that
 the uncalled model itself refused them. This evidence is private and is not
 eligible for public publication.
+
+## Actual local CPU training smoke result
+
+`F521-SMOLLM2-CPU-SFT-001` has completed locally in WSL CPU mode. It uses the
+pinned public `HuggingFaceTB/SmolLM2-135M-Instruct` revision
+`12fd25f77366fa6b3b4b768ec3050bf629380bac`, never the frozen GLM/Colibri
+runtime. The run trained only that model's output head on 20 safe synthetic
+Green fixtures and evaluated three deterministic held-out fixtures. It ran
+60 optimisation steps; loss fell from `2.941424` to `0.600179`, while held-out
+exact-disposition accuracy remained `2/3` before and after. This is execution
+evidence, not a quality, safety, or production-readiness claim.
+
+The exact private evidence is
+`evidence/training/f521-smollm2-135m-cpu-sft-smoke-v0.1.json`. Its exact-file
+SHA-256 is
+`439f668017665da712c2f43c1b466f6d221a0ca411467696c817f3d5ebe4eec6` and its
+canonical evidence digest is
+`2843bb2a446a0e411f518b93896eee3bccb38d267caf9e723da0319037e06682` (canonical
+JSON with `evidence_package_digest` blank). The private learned-weight SHA-256
+is `314b43730fdebed3222cc45bc6b3bb7770ef8c1eb66989f162accb794ac199f1`; the
+weight file is intentionally Git-ignored and is not eligible for publication.
+
+To reproduce the isolated run privately, with the installed local CPU Python
+environment only:
+
+```text
+.venv-sft/bin/python training/run_cpu_sft_smoke.py
+```
+
+It has no mediator connection, listener, action tool, or public release path.
+`COMPLETED_SMOKE_ONLY` is deliberately ineligible for the public evidence
+repository. A public pass requires a separately verified result with a
+sanitized aggregate and exact SHA-256 binding.

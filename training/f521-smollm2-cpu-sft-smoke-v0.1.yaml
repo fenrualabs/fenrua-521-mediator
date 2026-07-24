@@ -1,0 +1,28 @@
+# F521 CPU SFT smoke test — private local WSL execution profile
+
+run_id: F521-SMOLLM2-CPU-SFT-001
+profile_version: "fenrua-521-smollm2-cpu-sft-smoke/v0.1"
+base_model:
+  repository: HuggingFaceTB/SmolLM2-135M-Instruct
+  revision: 12fd25f77366fa6b3b4b768ec3050bf629380bac
+  trust_remote_code: false
+execution:
+  environment: local_wsl_cpu
+  device: cpu
+  gpu: disabled
+  base_weight_mutation: false
+  frozen_colibri_runtime_mutation: false
+  optimization: output_embedding_head_only
+data:
+  source: frozen_Green_EVAL_01_to_08_fixture_set
+  selection: non-terminal and canary/suspect-free fixtures only
+  expected_selected_cases: 23
+  raw_input_persistence: forbidden
+evaluation:
+  split: deterministic_stratified_holdout
+  metric: label_likelihood_exact_disposition_accuracy
+  evidence: aggregate metrics and bounded identifiers only
+limits:
+  mediator_connection: forbidden
+  authority_claim: forbidden
+  public_release: forbidden

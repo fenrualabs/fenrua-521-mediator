@@ -1,0 +1,7 @@
+# Private local training runtime, caches, and learned weights are never committed.
+.venv-sft/
+.uv-sft-cache/
+.hf-sft-cache/
+artifacts/sft/*.safetensors
+artifacts/sft/*.bin
+artifacts/sft/*.pt
