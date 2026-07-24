@@ -1,4 +1,5 @@
 export { intakeRequest } from './src/intake.mjs';
+export { ENVELOPE_PROFILE_DIGEST, ENVELOPE_SCHEMA_DIGEST, ENVELOPE_VERSION, validateInterEngineEnvelope } from './src/inter-engine-envelope.mjs';
 export { validateEvidenceDisposition } from './src/schema.mjs';
 export { validateSemantics } from './src/semantic.mjs';
 export { evaluatePolicy } from './src/policy.mjs';

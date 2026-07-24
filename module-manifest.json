@@ -31,7 +31,7 @@
     "inter_engine_envelope": {
       "file": "schemas/inter-engine-envelope.schema.json",
       "id": "urn:fenrua:schemas:inter-engine-envelope:v1",
-      "sha256": "sha256:3a1e270a1cf2ecf444b5cfafd92eeab0866ea6eb9ba62fa78edd4fc4736a06059292"
+      "sha256": "sha256:3a1e270a1cf2ecf444b5cfafd92eeab0866ea6eb9ba62fa78edd4fc52adf437e"
     }
   },
   "semantic_profile": {
@@ -194,6 +194,43 @@
       "reason": "The first real loopback capability run returned no bounded model completion; its circuit-breaker cases remain incomplete rather than being promoted to conservative outcomes."
     },
     "publication": "private repository only; no public mirror without a separate owner decision"
+  },
+  "inter_engine_envelope_validation": {
+    "id": "KRN-ENV-001",
+    "profile": {
+      "file": "envelope/fenrua-521-inter-engine-envelope-rules-v0.4.yaml",
+      "source_proposal_sha256": "sha256:66dc28919cbfa10245fbc5d9c34c01e333dfcdad9a87448d280fb1f27ce3520b",
+      "profile_sha256": "sha256:d5f23f9fbc9d70c4bc0f8518d86acf7a5becedf456973b80dc1ca3e6aac89ed5"
+    },
+    "schema": {
+      "file": "schemas/inter-engine-envelope.schema.json",
+      "sha256": "sha256:3a1e270a1cf2ecf444b5cfafd92eeab0866ea6eb9ba62fa78edd4fc52adf437e",
+      "correction": "The supplied proposal and prior manifest entry ended in 4736a06059292; the actual imported schema bytes verify as 52adf437e and are authoritative."
+    },
+    "examples": {
+      "file": "envelope/fenrua-521-inter-engine-envelope-examples-v0.4.json",
+      "sha256": "sha256:c4606c53c07cc51b5c25c98aae9c89b8d92a878c9800e437f46fca640c092515",
+      "example_set_digest": "sha256:370c2072ae1252ae2dfb55e780e66ab730f44577c297aa2ab92fe524aaa5be94"
+    },
+    "implementation": {
+      "constants_file": "src/constants.mjs",
+      "constants_sha256": "sha256:b66cb804b60f54e9bcb6d8765daf1315647de0393ac1c5531149cc0b4c0d3800",
+      "validator_file": "src/inter-engine-envelope.mjs",
+      "validator_sha256": "sha256:27eb9ec67686176616c496dd78c0d052e00fd53827bb9b65919b2dc2fb2b6921",
+      "runner_file": "src/inter-engine-envelope-runner.mjs",
+      "runner_sha256": "sha256:f7c20f90abfcc5a44af06b3f84a1d910e87ffdd32a5226d2e767f287aef5efd0",
+      "entrypoint": "bin/run-inter-engine-envelope-examples.mjs",
+      "entrypoint_sha256": "sha256:b594e9840befb2eabfae78e4bd4b38b8dbe2534c15e4a1dacb62b13e40fcecbc"
+    },
+    "execution": {
+      "file": "evidence/envelopes/fenrua-521-inter-engine-envelope-examples-v0.3.json",
+      "sha256": "sha256:c00d8031535990d1471844be7d31facf9609032610d5d330d2b391508ce5833c",
+      "evidence_package_digest": "sha256:2b5d642c27fd35d3a701dd9cb37832fa7ca6f76dfd2ffafcfb33ed438ac7150e",
+      "build_state": "VERIFIED",
+      "summary": {"total": 6, "accepted": 1, "rejected": 5, "error": 0}
+    },
+    "scope": "Local mediation-boundary conformance only; no model capability or authority claim.",
+    "publication": "A sanitized aggregate may be published only through the public evidence SHA-256 release process."
   },
   "fixture_assets": {
     "eval_01_to_05": {

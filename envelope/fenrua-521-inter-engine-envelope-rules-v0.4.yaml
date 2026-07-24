@@ -1,0 +1,38 @@
+# KRN-ENV-001 local inter-engine envelope validator profile
+# Source proposal SHA-256: 66dc28919cbfa10245fbc5d9c34c01e333dfcdad9a87448d280fb1f27ce3520b
+# Status: EXECUTION_READY; Green examples, local validator implementation.
+
+tool_id: KRN-ENV-001
+profile_version: "fenrua-521-envelope-validator/v0.4"
+envelope_version: "fenrua-521-envelope/v1"
+schema_file: schemas/inter-engine-envelope.schema.json
+schema_digest: "sha256:3a1e270a1cf2ecf444b5cfafd92eeab0866ea6eb9ba62fa78edd4fc52adf437e"
+classification: green
+
+normalizations_from_source_proposal:
+  - "The example sequence is a named fixture set with an injected deterministic clock."
+  - "Sender acceptance requires an exact engine_id plus candidate_digest approval pair."
+  - "Green and amber_local binding-kind coupling applies to both input_binding and integrity.request_binding."
+  - "Green bindings require exact locally approved SHA-256 values; amber_local bindings require approved hmac-sha256 commitments."
+  - "Recipient ID and output schema are explicit local configuration, not inferred from syntactic validity."
+  - "Every acceptance or rejection emits a SHA-256-bound validation receipt without retaining task scope or binding values."
+
+binding_rules:
+  green:
+    kind: approved_green_sha256
+    value: "sha256:<64 lowercase hexadecimal characters> present in local approval configuration"
+  amber_local:
+    kind: keyed_local_commitment
+    value: "hmac-sha256:<64 lowercase hexadecimal characters> present in local approval configuration"
+
+validation_order:
+  - "Validator configuration must be complete."
+  - "Envelope version and opaque correlation ID are required."
+  - "Sender pair, recipient ID, task class, classification, source bindings, both binding fields, requested output schema, then expiry are checked."
+  - "Expiry is compared against injected UTC time for test determinism or the caller-provided current time in operation."
+
+hard_constraints:
+  - "No envelope is accepted from an unapproved sender pair."
+  - "No Green or amber_local binding is accepted based on syntax alone."
+  - "Task scopes and binding values do not appear in validation receipts or evidence packages."
+  - "Envelope acceptance is a mediation boundary result; it is not a model-capability or authority result."

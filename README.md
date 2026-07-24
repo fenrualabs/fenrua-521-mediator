@@ -40,6 +40,22 @@ The runner writes `evidence/baselines/fenrua-521-first-deterministic-baseline-v0
 It processes fixture metadata through the five KRN stages and records only
 bounded case metadata and receipts—never fixture prompt text.
 
+`KRN-ENV-001` validates inter-engine envelopes before they can enter a
+mediator boundary. It requires an exact approved sender pair, configured
+recipient and output schema, classification-correct local binding approval,
+and a non-expired envelope. The six supplied examples are executed with a
+fixed test clock and each result receives a bounded SHA-256 receipt.
+
+Run its evidence package privately:
+
+```text
+node bin/run-inter-engine-envelope-examples.mjs
+```
+
+It writes `evidence/envelopes/fenrua-521-inter-engine-envelope-examples-v0.3.json`.
+This is a local mediation-boundary test, not a capability-model or authority
+claim.
+
 `KRN-FML-001` has a two-step Formula Contract path. Its deterministic,
 Amber-local `F521-EVENT-001` reference profile provides an executable test
 base with exact encoding, fixed vectors, and bounded receipts. A passing
