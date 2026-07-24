@@ -1,0 +1,25 @@
+# fenrua-521-first-baseline-acceptance-spec-v0.2.yaml
+# Status: ACCEPTED — owner-provided local execution requirements
+# reconstruction_risk: low
+
+spec_version: "fenrua-521-first-baseline-acceptance/v0.2"
+classification: green
+contains_live_data: false
+scope: "First protected deterministic KRN pipeline slice"
+
+required_evidence:
+  - id: BAS-001
+    requirement: "Run all 52 declared Green fixtures through KRN-INT-001 → KRN-SCH-001 → KRN-SEM-001 → KRN-POL-001 → KRN-REC-001."
+  - id: BAS-002
+    requirement: "Report total, verified, contained, refused, and error counts."
+  - id: BAS-003
+    requirement: "Include one bounded receipt for each major outcome: verified, contained, and refused."
+  - id: BAS-004
+    requirement: "Pin fixture-set, runtime, schema, semantic-profile, and policy-profile digests."
+  - id: BAS-005
+    requirement: "Set build_state to VERIFIED, NEEDS_EVIDENCE, or BLOCKED."
+
+interpretation:
+  deterministic_pipeline_verified: "All fixture metadata cases complete without error through the five local KRN stages."
+  model_capability_not_claimed: "A deterministic adapter does not establish a model-capability baseline when no model endpoint is present."
+  raw_prompt_handling: "Fixture prompts must not be passed to the pipeline or emitted in the evidence package."

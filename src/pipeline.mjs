@@ -43,8 +43,8 @@ function terminal(intake, outcome, stages, createdAt) {
  * Runs the complete deterministic five-stage path. The returned value contains
  * no input record and this function never calls a model, tool, or network API.
  */
-export function processEvidenceRequest(request, { createdAt } = {}) {
-  const intake = intakeRequest(request);
+export function processEvidenceRequest(request, { createdAt, correlationIdFactory } = {}) {
+  const intake = intakeRequest(request, correlationIdFactory ? { correlationIdFactory } : undefined);
   if (!intake.ok) return terminal(intake, intake, [intake.stage], createdAt);
   if (intake.status !== 'accepted') {
     return terminal(intake, { stage: intake.stage, status: 'contained', code: 'LOCAL_REFERENCE_RESOLUTION_NOT_IMPLEMENTED' }, [intake.stage], createdAt);

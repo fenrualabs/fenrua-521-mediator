@@ -21,8 +21,8 @@ export const DEFAULT_INTAKE_LIMITS = Object.freeze({ maxBytes: 64 * 1024, maxFie
  * Green records receive a content digest; bounded local references must supply
  * a precomputed opaque local commitment rather than their underlying content.
  */
-export function intakeRequest(request, { limits = DEFAULT_INTAKE_LIMITS } = {}) {
-  const correlationId = issueCorrelationId();
+export function intakeRequest(request, { limits = DEFAULT_INTAKE_LIMITS, correlationIdFactory = issueCorrelationId } = {}) {
+  const correlationId = correlationIdFactory();
   if (!isPlainObject(request) || !ALLOWED_CONTENT_TYPES.has(request.content_type)) {
     return fail(STAGE, 'INTAKE_SIZE_OR_SHAPE', 'REJECT', correlationId);
   }

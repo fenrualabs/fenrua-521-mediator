@@ -25,8 +25,17 @@ profile, and KRN-REC-001 receipt profile are pinned in
 been executed against a model endpoint, which this module deliberately does
 not provide.
 
-`corpus/green/fenrua-521-green-corpus-manifest-bootstrap-v0.2.yaml` binds the
-six supplied Green artifact families by content digest. It intentionally leaves
-the separately declared baseline acceptance specification unbound until its
-actual source artifact is supplied; it never infers a completed baseline from
-guidance material alone.
+`corpus/green/fenrua-521-green-corpus-manifest-bootstrap-v0.2.yaml` binds all
+seven supplied Green artifact families by content digest, including the
+owner-provided baseline acceptance specification. The local runner remains
+strictly deterministic; it does not claim a model-capability baseline.
+
+Run the first protected-slice evidence package privately:
+
+```text
+node bin/run-green-baseline.mjs
+```
+
+The runner writes `evidence/baselines/fenrua-521-first-deterministic-baseline-v0.1.json`.
+It processes fixture metadata through the five KRN stages and records only
+bounded case metadata and receipts—never fixture prompt text.

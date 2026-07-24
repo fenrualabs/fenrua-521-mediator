@@ -108,13 +108,16 @@ items:
   - item_id: "G-0007"
     title: "First baseline acceptance spec"
     origin: synthetic
-    source_of_truth: "Not supplied"
+    source_of_truth: "Owner-provided first protected slice acceptance requirements"
     reconstruction_risk: low
     external_share: allowed
     allowed_uses: [evaluation]
     review_state: ready_for_review
-    binding_state: pending_source
-    binding_note: "Declared by the bootstrap proposal, but no acceptance-spec source file has been supplied or retained locally."
+    binding_state: bound
+    artifacts:
+      - path: "corpus/green/fenrua-521-first-baseline-acceptance-spec-v0.2.yaml"
+        sha256: "sha256:c6e202888606bd9b695779f7a43d626cf8a6e49eef137ecf0d98e0e5cae16274"
+        role: acceptance_spec
 
 local_verification_bindings:
   - item_id: "G-0001"
@@ -125,9 +128,9 @@ local_verification_bindings:
 
 summary:
   total_items: 7
-  bound_items: 6
-  pending_source_items: 1
+  bound_items: 7
+  pending_source_items: 0
   rejected_items: 0
   amber_or_red_items: 0
   disclosure_lint_result: READY_TO_EXECUTE
-  manifest_digest: "sha256:36e6564c39f8af22ec7f130fa4c64c03738725a4ae27e1f575384115f96404cb"
+  manifest_digest: "sha256:4649759bdc76500e9c461c5e685f4a539cad2ddb8cd0fcc0618d229895af1289"
