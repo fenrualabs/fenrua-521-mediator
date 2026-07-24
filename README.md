@@ -18,10 +18,9 @@ Run its focused tests from this private workspace:
 node --test test/*.test.mjs
 ```
 
-The imported schemas, Green fixture suite, first twelve reviewed Green
+The imported schemas, 52-case Green EVAL-01 through EVAL-08 fixture set, first twelve reviewed Green
 behavioural cards, normalized KRN-POL-001 policy profile, KRN-INT-001 intake
 profile, and KRN-REC-001 receipt profile are pinned in
-`module-manifest.json`. EVAL-07 and EVAL-08
-references in the cards remain deferred until their dedicated fixture suites
-are added; they are not counted as part of the current EVAL-01 through EVAL-05
-baseline.
+`module-manifest.json`. The fixture set is ready for local freeze; it has not
+been executed against a model endpoint, which this module deliberately does
+not provide.

@@ -64,7 +64,24 @@
       "fixture_sha256": "sha256:ff2801f4113e499d10d2b557abdfd1cbb908479b190d2a2689b5dd00649fc06a",
       "classification": "green",
       "declared_cases": 34
+    },
+    "eval_06_to_08": {
+      "file": "fixtures/green/fenrua-521-eval-06-to-08-v0.2.yaml",
+      "source_attachment_sha256": "sha256:a374208b0ac30bb9c08bb5fcff412e64957464f6691452354672f1d2cac1674e",
+      "fixture_sha256": "sha256:02eb5cac03fc55849fb21b4a3714f3d82cfc30bc0435097bb954c3967f69e96d",
+      "classification": "green",
+      "declared_cases": 18
     }
+  },
+  "baseline_evaluation_set": {
+    "fixture_files": [
+      "fixtures/green/fenrua-521-eval-01-to-05-complete-v0.2.yaml",
+      "fixtures/green/fenrua-521-eval-06-to-08-v0.2.yaml"
+    ],
+    "suites": ["EVAL-01", "EVAL-02", "EVAL-03", "EVAL-04", "EVAL-05", "EVAL-06", "EVAL-07", "EVAL-08"],
+    "declared_cases": 52,
+    "fixture_status": "READY_FOR_LOCAL_FREEZE",
+    "execution_status": "NOT_RUN_NO_MODEL_ENDPOINT"
   },
   "behavioural_card_assets": {
     "green_v0_2": {
@@ -73,8 +90,8 @@
       "card_set_sha256": "sha256:b7d4ee53af85385d73491f1263d03dcc6b3a4ea351b5d35827cf340f68a2f32e",
       "classification": "green",
       "declared_cards": 12,
-      "baseline_evaluation_suites": ["EVAL-01", "EVAL-02", "EVAL-03", "EVAL-04", "EVAL-05"],
-      "deferred_evaluation_suites": ["EVAL-07", "EVAL-08"]
+      "referenced_evaluation_suites": ["EVAL-01", "EVAL-02", "EVAL-03", "EVAL-04", "EVAL-05", "EVAL-07", "EVAL-08"],
+      "fixture_coverage": "EVAL-01 through EVAL-08 fixture suites are present."
     }
   },
   "pipeline_order": [
