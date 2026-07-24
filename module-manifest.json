@@ -1,0 +1,56 @@
+{
+  "module_id": "fenrua-521-kernel-mediator",
+  "module_version": "0.1.0-local",
+  "status": "BUILDING",
+  "workspace_binding": {
+    "binding_kind": "private standalone local worktree",
+    "storage_target": "owner-controlled D: workspace",
+    "remote_repository": "none",
+    "publication": "forbidden without a separate owner decision"
+  },
+  "source_pack_binding": {
+    "package_version": "0.2",
+    "package_manifest_sha256": "sha256:cc9da45c2d1c50269c7c827c8fed93dc128a4e5c416d73433a4f3ae4b264b6c4",
+    "checksum_manifest_sha256": "sha256:ad6bd0678f2de02e086e72b5be4964e8f7cbc6e040b144ce606790a40e5eea98",
+    "verification": "Fenrua pack verified: 21 pinned files."
+  },
+  "schema_assets": {
+    "evidence_disposition": {
+      "file": "schemas/evidence-disposition.schema.json",
+      "id": "urn:fenrua:schemas:evidence-disposition:v1",
+      "sha256": "sha256:3612ea9ee7f440d7d2458acc343b777f28871195481e6ec09e252251caed48a0"
+    },
+    "inter_engine_envelope": {
+      "file": "schemas/inter-engine-envelope.schema.json",
+      "id": "urn:fenrua:schemas:inter-engine-envelope:v1",
+      "sha256": "sha256:3a1e270a1cf2ecf444b5cfafd92eeab0866ea6eb9ba62fa78edd4fc4736a06059292"
+    }
+  },
+  "semantic_profile": {
+    "id": "KRN-SEM-001",
+    "version": "fenrua-521-sem-001/v0.2",
+    "sem_009_binding": "fact.evidence_ref resolves to exactly one evidence_refs.id; fact.source_digest resolves to exactly one integrity.source_bindings.source_digest; both classifications equal fact.disclosure_class."
+  },
+  "fixture_assets": {
+    "eval_01_to_05": {
+      "file": "fixtures/green/fenrua-521-eval-01-to-05-complete-v0.2.yaml",
+      "source_attachment_sha256": "sha256:88edcdde708f70d4d6403e411576fd98b69edf7987ce14cd2c1857895dd734c0",
+      "fixture_sha256": "sha256:ff2801f4113e499d10d2b557abdfd1cbb908479b190d2a2689b5dd00649fc06a",
+      "classification": "green",
+      "declared_cases": 34
+    }
+  },
+  "pipeline_order": [
+    "KRN-INT-001",
+    "KRN-SCH-001",
+    "KRN-SEM-001",
+    "KRN-POL-001",
+    "KRN-REC-001"
+  ],
+  "runtime_boundary": {
+    "network_egress": "forbidden",
+    "model_endpoint_calling": "not implemented",
+    "raw_input_persistence": "not implemented",
+    "human_authority_required": true
+  }
+}

@@ -1,0 +1,283 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fenrua:schemas:evidence-disposition:v1",
+  "title": "Fenrua-521 Evidence Disposition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_version",
+    "record_id",
+    "created_at",
+    "actor",
+    "claim_scope",
+    "disposition",
+    "authority_status",
+    "facts",
+    "inferences",
+    "evidence_refs",
+    "missing_evidence",
+    "conflicts",
+    "risks",
+    "permitted_next_steps",
+    "prohibited_actions",
+    "integrity"
+  ],
+  "properties": {
+    "record_version": {
+      "const": "fenrua-521-disposition/v1"
+    },
+    "record_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "identifier"],
+      "properties": {
+        "type": {
+          "enum": ["human", "model", "kernel_tool"]
+        },
+        "identifier": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      }
+    },
+    "claim_scope": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "disposition": {
+      "enum": [
+        "EVIDENCE_SUFFICIENT_FOR_REVIEW",
+        "INSUFFICIENT_EVIDENCE",
+        "CONTAINED_OR_OUT_OF_SCOPE",
+        "CONFLICTING_EVIDENCE",
+        "REFUSED_BY_POLICY"
+      ]
+    },
+    "authority_status": {
+      "enum": [
+        "human_decision_required",
+        "no_authority_requested",
+        "refused"
+      ]
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fact"
+      }
+    },
+    "inferences": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/inference"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceRef"
+      }
+    },
+    "missing_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "permitted_next_steps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "prohibited_actions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_digest",
+        "parent_record_refs",
+        "source_bindings"
+      ],
+      "properties": {
+        "schema_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "parent_record_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 240
+          }
+        },
+        "source_bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceBinding"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fact_id",
+        "statement",
+        "evidence_ref",
+        "source_digest",
+        "verification",
+        "disclosure_class"
+      ],
+      "properties": {
+        "fact_id": {
+          "type": "string",
+          "pattern": "^F-[A-Za-z0-9_-]{1,80}$"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "source_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "verification": {
+          "enum": ["direct", "kernel_verified", "human_attested"]
+        },
+        "disclosure_class": {
+          "enum": ["green", "amber", "red"]
+        }
+      }
+    },
+    "inference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "depends_on",
+        "assumptions",
+        "confidence",
+        "counterexamples_considered"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "depends_on": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^F-[A-Za-z0-9_-]{1,80}$",
+            "maxLength": 240
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "confidence": {
+          "enum": ["bounded", "low", "not_applicable"]
+        },
+        "counterexamples_considered": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        }
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "digest", "classification"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "classification": {
+          "enum": ["green", "amber", "red"]
+        }
+      }
+    },
+    "sourceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "source_digest", "classification"],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "source_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "classification": {
+          "enum": ["green", "amber", "red"]
+        }
+      }
+    }
+  }
+}

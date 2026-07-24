@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fenrua:schemas:inter-engine-envelope:v1",
+  "title": "Fenrua-521 Inter-engine Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "envelope_version",
+    "correlation_id",
+    "sender",
+    "recipient",
+    "task",
+    "classification",
+    "source_bindings",
+    "input_binding",
+    "requested_output_schema",
+    "expiry",
+    "integrity"
+  ],
+  "properties": {
+    "envelope_version": {
+      "const": "fenrua-521-envelope/v1"
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 160
+    },
+    "parent_record_ref": {
+      "type": "string",
+      "maxLength": 240
+    },
+    "sender": {
+      "$ref": "#/$defs/component"
+    },
+    "recipient": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {
+        "type": {
+          "enum": ["policy_mediator", "kernel_tool", "capability_engine"]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "scope"],
+      "properties": {
+        "class": {
+          "enum": [
+            "classify",
+            "explain",
+            "evaluate",
+            "verify",
+            "generate_synthetic_fixture"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        }
+      }
+    },
+    "classification": {
+      "enum": ["green", "amber_local"]
+    },
+    "source_bindings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sourceBinding"
+      }
+    },
+    "input_binding": {
+      "$ref": "#/$defs/inputBinding"
+    },
+    "requested_output_schema": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "expiry": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["request_binding"],
+      "properties": {
+        "request_binding": {
+          "$ref": "#/$defs/inputBinding"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine_id", "candidate_digest"],
+      "properties": {
+        "engine_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_digest": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "inputBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": {
+          "enum": ["approved_green_sha256", "keyed_local_commitment"]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 16,
+          "maxLength": 240
+        }
+      }
+    },
+    "sourceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "source_digest", "classification"],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "source_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "classification": {
+          "enum": ["green", "amber"]
+        }
+      }
+    }
+  }
+}
