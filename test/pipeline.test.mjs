@@ -125,10 +125,10 @@ test('KRN-SEM-001 contains Red material without returning it', () => {
 });
 
 test('KRN-INT-001 contains undeclared classifications before model delivery', () => {
-  const result = intakeRequest({ classification: 'red', fixture_id: 'f521-syn-case-000001', record: validRecord() });
+  const result = intakeRequest({ content_type: 'application/json', classification: 'red', fixture_id: 'f521-syn-case-000001', record: validRecord() });
   assert.equal(result.ok, false);
   assert.equal(result.status, 'contained');
-  assert.equal(result.code, 'UNDECLARED_OR_SUSPECT_CLASSIFICATION');
+  assert.equal(result.code, 'INTAKE_NON_GREEN');
   assert.equal('record' in result, false);
 });
 

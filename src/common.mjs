@@ -1,5 +1,12 @@
 import crypto from 'node:crypto';
 
+const SUSPECT_OR_CANARY = [
+  /-----BEGIN(?: [A-Z]+)? PRIVATE KEY-----/i,
+  /\b(?:sk|rk|api)[_-][A-Za-z0-9]{16,}\b/i,
+  /\bf521[-_]?canary\b/i,
+  /\b(?:ignore|disregard) (?:all )?(?:previous|prior) instructions\b/i,
+];
+
 export function isPlainObject(value) {
   if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
   const prototype = Object.getPrototypeOf(value);
@@ -68,4 +75,12 @@ export function countFields(value) {
     if (Array.isArray(entry) || isPlainObject(entry)) count += 1;
   });
   return count;
+}
+
+export function containsSuspectOrCanary(value) {
+  let detected = false;
+  walkValues(value, (entry) => {
+    if (typeof entry === 'string' && SUSPECT_OR_CANARY.some((pattern) => pattern.test(entry))) detected = true;
+  });
+  return detected;
 }

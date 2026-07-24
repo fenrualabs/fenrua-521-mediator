@@ -42,6 +42,21 @@
       "outcome_map moved from the rules sequence to the top level."
     ]
   },
+  "intake_profile": {
+    "id": "KRN-INT-001",
+    "file": "intake/krn-int-001-intake-v0.2.yaml",
+    "version": "fenrua-521-int-001/v0.2",
+    "source_attachment_sha256": "sha256:f748307d7cf2d585ac1c7a76ac3fa83301ba814836fc161d65f7c6ce0816b015",
+    "profile_sha256": "sha256:1ba1bfe7af8a440da553f16ac28aad54929a09179ab19c9dbd9faf33d39aff39"
+  },
+  "receipt_profile": {
+    "id": "KRN-REC-001",
+    "file": "receipt/krn-rec-001-receipt-v0.2.yaml",
+    "version": "fenrua-521-receipt/v1",
+    "source_attachment_sha256": "sha256:f748307d7cf2d585ac1c7a76ac3fa83301ba814836fc161d65f7c6ce0816b015",
+    "profile_sha256": "sha256:e3afcce93b9681e864efcaad591f0e411e3caed5b56d50119ad4337679e782f4",
+    "terminal_receipt_rule": "Receipts require accepted intake with an approved binding. A verified receipt requires all four prior stages; contained or refused receipts may follow a terminal result from any completed post-intake stage."
+  },
   "fixture_assets": {
     "eval_01_to_05": {
       "file": "fixtures/green/fenrua-521-eval-01-to-05-complete-v0.2.yaml",

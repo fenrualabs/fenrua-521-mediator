@@ -1,5 +1,6 @@
 import {
   allStringsAreNfc,
+  containsSuspectOrCanary,
   countFields,
   fail,
   isPlainObject,
@@ -11,8 +12,9 @@ import {
 const STAGE = 'KRN-INT-001';
 const GREEN_FIXTURE_ID = /^f521-syn-(?:tenant|agent|formula|case)-[0-9]{6}$/;
 const LOCAL_COMMITMENT = /^local:[A-Za-z0-9_-]{16,200}$/;
+const ALLOWED_CONTENT_TYPES = new Set(['application/json', 'text/yaml']);
 
-export const DEFAULT_INTAKE_LIMITS = Object.freeze({ maxBytes: 64 * 1024, maxFields: 512 });
+export const DEFAULT_INTAKE_LIMITS = Object.freeze({ maxBytes: 64 * 1024, maxFields: 128 });
 
 /**
  * Classifies an in-memory request without logging or persisting its body.
@@ -21,16 +23,19 @@ export const DEFAULT_INTAKE_LIMITS = Object.freeze({ maxBytes: 64 * 1024, maxFie
  */
 export function intakeRequest(request, { limits = DEFAULT_INTAKE_LIMITS } = {}) {
   const correlationId = issueCorrelationId();
-  if (!isPlainObject(request)) return fail(STAGE, 'MALFORMED_REQUEST_ENVELOPE', 'CONTAIN', correlationId);
+  if (!isPlainObject(request) || !ALLOWED_CONTENT_TYPES.has(request.content_type)) {
+    return fail(STAGE, 'INTAKE_SIZE_OR_SHAPE', 'REJECT', correlationId);
+  }
+  if (request.persistence_requested === true) return fail(STAGE, 'INTAKE_RAW_PERSISTENCE', 'CONTAIN', correlationId);
 
   const { classification } = request;
   if (classification !== 'green' && classification !== 'bounded-local-reference') {
-    return fail(STAGE, 'UNDECLARED_OR_SUSPECT_CLASSIFICATION', 'CONTAIN', correlationId);
+    return fail(STAGE, 'INTAKE_NON_GREEN', 'CONTAIN', correlationId);
   }
 
   if (classification === 'bounded-local-reference') {
     if (!LOCAL_COMMITMENT.test(request.local_commitment ?? '')) {
-      return fail(STAGE, 'INVALID_LOCAL_COMMITMENT', 'CONTAIN', correlationId);
+      return fail(STAGE, 'INTAKE_SIZE_OR_SHAPE', 'REJECT', correlationId);
     }
     return Object.freeze({
       ok: true,
@@ -42,19 +47,21 @@ export function intakeRequest(request, { limits = DEFAULT_INTAKE_LIMITS } = {}) 
   }
 
   if (!GREEN_FIXTURE_ID.test(request.fixture_id ?? '')) {
-    return fail(STAGE, 'UNDECLARED_GREEN_FIXTURE', 'CONTAIN', correlationId);
+    return fail(STAGE, 'INTAKE_NON_GREEN', 'CONTAIN', correlationId);
   }
-  if (!isPlainObject(request.record)) return fail(STAGE, 'MISSING_TYPED_RECORD', 'CONTAIN', correlationId);
-  if (!allStringsAreNfc(request.record)) return fail(STAGE, 'UNNORMALIZED_UNICODE', 'CONTAIN', correlationId);
+  if (!isPlainObject(request.record)) return fail(STAGE, 'INTAKE_SIZE_OR_SHAPE', 'REJECT', correlationId);
+  if (containsSuspectOrCanary(request.record)) return fail(STAGE, 'INTAKE_CANARY_OR_SUSPECT', 'CONTAIN', correlationId);
+  if (!allStringsAreNfc(request.record)) return fail(STAGE, 'INTAKE_SIZE_OR_SHAPE', 'REJECT', correlationId);
 
   let byteLength;
   try {
     byteLength = utf8ByteLength(request.record);
   } catch {
-    return fail(STAGE, 'NON_CANONICAL_REQUEST_VALUE', 'CONTAIN', correlationId);
+    return fail(STAGE, 'INTAKE_SIZE_OR_SHAPE', 'REJECT', correlationId);
   }
-  if (byteLength > limits.maxBytes) return fail(STAGE, 'REQUEST_SIZE_LIMIT_EXCEEDED', 'CONTAIN', correlationId);
-  if (countFields(request.record) > limits.maxFields) return fail(STAGE, 'REQUEST_FIELD_LIMIT_EXCEEDED', 'CONTAIN', correlationId);
+  if (byteLength > limits.maxBytes || countFields(request.record) > limits.maxFields) {
+    return fail(STAGE, 'INTAKE_SIZE_OR_SHAPE', 'REJECT', correlationId);
+  }
 
   return Object.freeze({
     ok: true,

@@ -19,7 +19,8 @@ node --test test/*.test.mjs
 ```
 
 The imported schemas, Green fixture suite, first twelve reviewed Green
-behavioural cards, and normalized KRN-POL-001 policy profile are pinned in
+behavioural cards, normalized KRN-POL-001 policy profile, KRN-INT-001 intake
+profile, and KRN-REC-001 receipt profile are pinned in
 `module-manifest.json`. EVAL-07 and EVAL-08
 references in the cards remain deferred until their dedicated fixture suites
 are added; they are not counted as part of the current EVAL-01 through EVAL-05

@@ -1,0 +1,29 @@
+# krn-rec-001-receipt-v0.2.yaml
+# Status: PROPOSAL — Green
+# reconstruction_risk: low
+
+receipt_version: "fenrua-521-receipt/v1"
+emitted_only_after:
+  - KRN-INT-001
+  - KRN-SCH-001
+  - KRN-SEM-001
+  - KRN-POL-001
+
+required_fields:
+  - receipt_version: "fenrua-521-receipt/v1"
+  - correlation_id: "opaque ID from intake"
+  - input_binding:
+      kind: approved_green_sha256 | keyed_local_commitment
+      value: "binding value"
+  - schema_version: "fenrua-521-disposition/v1"
+  - semantic_profile_version: "fenrua-521-sem-001/v0.2"
+  - policy_version: "fenrua-521-pol-001/v0.2"
+  - result: verified | contained | refused
+  - created_at: "RFC-3339 timestamp"
+  - receipt_digest: "sha256:..."
+
+rules:
+  - Never include raw prompt, body, Red data, or canary values.
+  - receipt_digest covers the canonical serialization of all fields above.
+  - A receipt is emitted only when the four prior stages have completed.
+  - result=verified does not mean production approval; it means the record passed the local deterministic checks.

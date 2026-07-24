@@ -1,0 +1,50 @@
+# krn-int-001-intake-v0.2.yaml
+# Status: PROPOSAL — Green
+# reconstruction_risk: low
+
+rule_set_version: "fenrua-521-int-001/v0.2"
+position: first
+fail_closed: true
+
+limits:
+  max_bytes: 65536          # local policy may tighten
+  max_fields: 128
+  unicode_normalization: NFC
+  allowed_content_types: ["application/json", "text/yaml"]
+
+rules:
+
+  - id: INT-001
+    name: size_and_shape
+    description: Reject oversized or malformed envelopes before any parsing that retains data.
+    action: REJECT
+    code: "INTAKE_SIZE_OR_SHAPE"
+
+  - id: INT-002
+    name: classification_gate
+    description: Only declared Green fixtures or bounded local references are accepted for the model path.
+    action: CONTAIN
+    code: "INTAKE_NON_GREEN"
+
+  - id: INT-003
+    name: canary_and_suspect
+    description: Local canary patterns or suspect secret-like strings are quarantined before logging or model delivery.
+    action: CONTAIN
+    code: "INTAKE_CANARY_OR_SUSPECT"
+
+  - id: INT-004
+    name: no_raw_persistence
+    description: Raw prompt/body is never written to disk or retained in memory beyond the request lifetime.
+    action: CONTAIN
+    code: "INTAKE_RAW_PERSISTENCE"
+
+  - id: INT-005
+    name: correlation_id
+    description: Every accepted request receives an opaque correlation_id that is the only reference retained in logs.
+    action: PASS
+    code: null
+
+outcome_map:
+  REJECT:  stop, safe error only
+  CONTAIN: quarantine, emit containment receipt, no model delivery
+  PASS:    hand to KRN-SCH-001 with correlation_id

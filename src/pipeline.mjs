@@ -6,11 +6,22 @@ import { validateEvidenceDisposition } from './schema.mjs';
 import { validateSemantics } from './semantic.mjs';
 
 function boundedBinding(intake) {
-  return intake?.input_binding ?? { kind: 'unavailable', value: 'not-recorded' };
+  return intake?.input_binding;
 }
 
 function terminal(intake, outcome, stages, createdAt) {
   const result = outcome.status === 'contained' ? 'contained' : 'refused';
+  if (!boundedBinding(intake)) {
+    return Object.freeze({
+      ok: false,
+      status: result,
+      stage: outcome.stage,
+      code: outcome.code,
+      correlation_id: outcome.correlation_id,
+      receipt: null,
+      receipt_emitted: false,
+    });
+  }
   return Object.freeze({
     ok: false,
     status: result,
@@ -18,7 +29,7 @@ function terminal(intake, outcome, stages, createdAt) {
     code: outcome.code,
     correlation_id: intake?.correlation_id ?? outcome.correlation_id,
     receipt: createReceipt({
-      correlationId: intake?.correlation_id ?? outcome.correlation_id ?? 'unavailable',
+      correlationId: intake.correlation_id,
       inputBinding: boundedBinding(intake),
       schemaVersion: EVIDENCE_DISPOSITION_SCHEMA_VERSION,
       result,

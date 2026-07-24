@@ -49,6 +49,7 @@ function merge(target, source) {
 export function validRequest(overrides = {}) {
   const request = {
     classification: 'green',
+    content_type: 'application/json',
     fixture_id: 'f521-syn-case-000001',
     record: validRecord(),
     policy: {

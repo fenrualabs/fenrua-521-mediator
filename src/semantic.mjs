@@ -1,25 +1,11 @@
 import { SEMANTIC_PROFILE_VERSION } from './constants.mjs';
-import { fail, isPlainObject, walkValues } from './common.mjs';
+import { containsSuspectOrCanary, fail, isPlainObject } from './common.mjs';
 
 const STAGE = 'KRN-SEM-001';
 const FACT_ID = /^F-[A-Za-z0-9_-]{1,80}$/;
-const SECRET_OR_CANARY = [
-  /-----BEGIN(?: [A-Z]+)? PRIVATE KEY-----/i,
-  /\b(?:sk|rk|api)[_-][A-Za-z0-9]{16,}\b/i,
-  /\bf521[-_]?canary\b/i,
-  /\b(?:ignore|disregard) (?:all )?(?:previous|prior) instructions\b/i,
-];
 
 function ruleFailure(code, action, correlationId) {
   return fail(STAGE, code, action, correlationId);
-}
-
-function hasSensitiveResidue(record) {
-  let detected = false;
-  walkValues(record, (value) => {
-    if (typeof value === 'string' && SECRET_OR_CANARY.some((pattern) => pattern.test(value))) detected = true;
-  });
-  return detected;
 }
 
 /**
@@ -98,7 +84,7 @@ export function validateSemantics(record, correlationId) {
   if (overLimit) return ruleFailure('RECORD_SIZE_LIMIT_EXCEEDED', 'REJECT', correlationId);
 
   // SEM-013
-  if (hasSensitiveResidue(record)) return ruleFailure('RAW_OR_CANARY_CONTENT_DETECTED', 'CONTAIN', correlationId);
+  if (containsSuspectOrCanary(record)) return ruleFailure('RAW_OR_CANARY_CONTENT_DETECTED', 'CONTAIN', correlationId);
 
   return Object.freeze({ ok: true, stage: STAGE, status: 'semantic-valid', semantic_profile_version: SEMANTIC_PROFILE_VERSION });
 }
