@@ -56,6 +56,21 @@ reference-evidence, independent-verifier, and owner-approval digests to be
 bound into a matching local Formula Contract. The full process is pinned in
 `formula/krn-fml-001-promotion-plan-v0.1.yaml`.
 
+`F521-FML-TEST-PROFILE-001` adds five explicit synthetic Formula test
+contracts: event commitment, session-bound nullifier replay, scalar
+canonicality, two-leaf Merkle root, and inclusion. Its encoding and vectors
+are frozen under `formula/test-profile/`; it emits `REFERENCE_VERIFIED` only
+and is not registered as a core or production Formula Contract.
+
+Run its bounded 10-vector evidence package privately:
+
+```text
+node bin/run-formula-test-profile.mjs
+```
+
+It writes `evidence/formula/f521-fml-001-test-profile-v0.3.json` with
+digest-only outcomes and self-verifying receipt bindings.
+
 `F521-CAP-BASELINE-001` is the first model-in-the-loop profile. It validates
 the frozen loopback runtime before execution, applies INT → SCH → SEM → POL
 before the model, and re-validates the bounded model disposition before REC.

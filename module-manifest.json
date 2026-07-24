@@ -96,6 +96,32 @@
         "summary": {"total": 4, "reference_verified": 1, "rejected": 3, "error": 0}
       }
     },
+    "test_profile": {
+      "id": "F521-FML-TEST-PROFILE-001",
+      "version": "test-v1",
+      "source_proposal_sha256": "sha256:5ad3139b79427c9cb06cf7612de4215a6a32d0b5e0cfba7ab4a3e9a98742bde5",
+      "file": "formula/test-profile/f521-fml-001-test-profile-contracts-v0.3.yaml",
+      "profile_sha256": "sha256:402ff1661e563b55f9ced922415fd5f110e243f1b306f61a9739eabc4ad83353",
+      "vector_file": "formula/test-profile/f521-fml-001-test-profile-v0.3-vectors.json",
+      "vector_set_sha256": "sha256:8ee154f0904172f1bd3683830538f083001bd97675766c22353870e27e421d3c",
+      "implementation_file": "src/formula-test-profile.mjs",
+      "implementation_sha256": "sha256:b80913637d8ef07fff2091b4107890586f664330a4b69e1c42f2bda736144b24",
+      "runner_file": "src/formula-test-profile-runner.mjs",
+      "runner_sha256": "sha256:7ba49f9127e559d641a5aa80809033c7e18ec85d772381eb8dfd8066476881d3",
+      "entrypoint": "bin/run-formula-test-profile.mjs",
+      "entrypoint_sha256": "sha256:587d7ef0dfce4db7083c98241890616fdb92269fcd9403664518480366d194de",
+      "classification": "amber_local_only",
+      "evidence_status": "REFERENCE_EVIDENCE_RECORDED_NOT_PRODUCTION_LOCKED",
+      "evidence": {
+        "file": "evidence/formula/f521-fml-001-test-profile-v0.3.json",
+        "sha256": "sha256:371aa1544814f9dedb2e132b999b29edb0bb6cc082c814f8cef45723f61552d6",
+        "evidence_package_digest": "sha256:f8feb85cc3e742dde5d357609c15254c10fb5a62b43eef235e876a8f745041fd",
+        "build_state": "REFERENCE_EVIDENCE_RECORDED",
+        "production_lock": "NOT_REQUESTED",
+        "summary": {"total": 10, "reference_verified": 5, "rejected": 5, "error": 0}
+      },
+      "normalization": "The source proposal is executed only as an explicit synthetic reference profile; it is not added to registered core Formula Contracts and cannot emit production VERIFIED."
+    },
     "promotion_plan": {
       "file": "formula/krn-fml-001-promotion-plan-v0.1.yaml",
       "sha256": "sha256:4e0ddc02d91a772ece2ef6796209ae05dc88d8f30170ef73a3ae382d6c9571b5"

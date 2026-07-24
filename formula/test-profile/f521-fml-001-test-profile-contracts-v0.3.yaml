@@ -1,0 +1,68 @@
+# KRN-FML-001 synthetic test-profile contracts
+# Source proposal SHA-256: 5ad3139b79427c9cb06cf7612de4215a6a32d0b5e0cfba7ab4a3e9a98742bde5
+# Status: REFERENCE_EXECUTION_READY; Amber local only.
+
+tool_id: KRN-FML-001
+profile_id: F521-FML-TEST-PROFILE-001
+profile_version: "fenrua-521-fml-001-test-profile/v0.3"
+version: test-v1
+classification: amber_local_only
+hash_algorithm: SHA-256
+
+normalizations_from_source_proposal:
+  - "Top-level contracts sequence is named explicitly."
+  - "All positive hash contracts contain their exact claimed digest."
+  - "q is a canonical decimal uint64 string; JSON number transport is not used for uint64."
+  - "Nullifier replay uses an explicit ephemeral synthetic session and namespace."
+  - "Signature canonicality is scalar-only and explicitly uses secp256k1 order; it is not signature-validity verification."
+  - "Merkle leaf, node, two-leaf tree, and inclusion side conventions are fixed below."
+  - "Successful execution emits REFERENCE_VERIFIED, never production VERIFIED."
+
+output:
+  disposition: REFERENCE_VERIFIED | REJECTED | INSUFFICIENT_EVIDENCE
+  receipt_digest: "sha256:..."
+  production_lock: NOT_REQUESTED
+
+canonical_encoding:
+  byte_string: "64 lowercase hexadecimal characters"
+  q: "canonical decimal uint64 string, encoded unsigned big-endian"
+  e: "uint32, encoded unsigned big-endian"
+  event_domain: F521_TEST_EVENT_V1
+  nullifier_domain: F521_TEST_NULL_V1
+  merkle_leaf_domain: F521_TEST_MERKLE_LEAF_V1
+  merkle_node_domain: F521_TEST_MERKLE_NODE_V1
+  merkle_tree: "Exactly two leaves. leaf_hash = SHA256(domain_leaf || leaf); root = SHA256(domain_node || leaf_hash_left || leaf_hash_right)."
+  inclusion_side: "side: left means the current node is left and the sibling is right."
+
+contracts:
+  - formula_id: F521-TEST-EVENT-001
+    family: event_commitment
+    symbolic_form: "SHA256(F521_TEST_EVENT_V1 || C_t || A_t || uint64be(q) || H_X || nu)"
+    required_public_inputs: [C_t, A_t, q, H_X, nu, claimed_commitment]
+
+  - formula_id: F521-TEST-NULL-001
+    family: nullifier
+    symbolic_form: "SHA256(F521_TEST_NULL_V1 || A_t || uint64be(q) || uint32be(e))"
+    required_public_inputs: [A_t, q, e, claimed_nullifier, synthetic_namespace]
+    replay_rule: "The same computed nullifier may verify once per ephemeral synthetic namespace/session."
+
+  - formula_id: F521-TEST-SIG-001
+    family: signature_canonicality
+    curve: secp256k1
+    scope: "Scalar canonicality only; no signature, public-key, or message verification."
+    required_public_inputs: [curve, r, s]
+    rules: ["1 <= r < n", "1 <= s <= floor((n-1)/2)"]
+
+  - formula_id: F521-TEST-MERKLE-001
+    family: merkle_root
+    required_public_inputs: [leaves, claimed_root]
+
+  - formula_id: F521-TEST-INCL-001
+    family: inclusion
+    required_public_inputs: [leaf, root, path]
+
+hard_constraints:
+  - "The profile is separate from registered core Formula Contracts."
+  - "It never returns private witnesses, keys, production domain separators, or a production VERIFIED disposition."
+  - "A result proves only the listed synthetic vector outcome."
+  - "No production Formula Contract may be promoted from this profile alone."

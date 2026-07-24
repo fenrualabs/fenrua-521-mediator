@@ -11,6 +11,13 @@ export {
   REFERENCE_EVENT_FORMULA_ID,
   REFERENCE_EVENT_VERSION,
 } from './src/formula-reference.mjs';
+export {
+  createFormulaTestProfileSession,
+  TEST_PROFILE_FORMULA_IDS,
+  TEST_PROFILE_ID,
+  TEST_PROFILE_VERSION,
+  verifyFormulaTestProfile,
+} from './src/formula-test-profile.mjs';
 export { createLoopbackEngineClient, loadCapabilityFixtures, parseEngineDisposition, runCapabilityBaseline } from './src/capability-baseline.mjs';
 export { attestFrozenCapabilityRuntime } from './src/capability-runtime.mjs';
 export {
