@@ -138,11 +138,11 @@ test('KRN-POL-001 refuses authority and cross-tenant actions', () => {
   });
   assert.equal(authority.ok, false);
   assert.equal(authority.status, 'refused');
-  assert.equal(authority.code, 'AUTHORITY_ACTION_REFUSED');
+  assert.equal(authority.code, 'AUTHORITY_GATE_OR_ACTIVATION');
 
   const crossTenant = processEvidenceRequest(validRequest({ policy: { target_tenant: 'f521-syn-tenant-000002' } }), {
     createdAt: '2026-07-25T01:02:03.000Z',
   });
   assert.equal(crossTenant.ok, false);
-  assert.equal(crossTenant.code, 'CROSS_TENANT_SCOPE_REFUSED');
+  assert.equal(crossTenant.code, 'TENANT_CROSS_SCOPE');
 });

@@ -18,8 +18,9 @@ Run its focused tests from this private workspace:
 node --test test/*.test.mjs
 ```
 
-The imported schemas, Green fixture suite, and first twelve reviewed Green
-behavioural cards are pinned in `module-manifest.json`. EVAL-07 and EVAL-08
+The imported schemas, Green fixture suite, first twelve reviewed Green
+behavioural cards, and normalized KRN-POL-001 policy profile are pinned in
+`module-manifest.json`. EVAL-07 and EVAL-08
 references in the cards remain deferred until their dedicated fixture suites
 are added; they are not counted as part of the current EVAL-01 through EVAL-05
 baseline.

@@ -1,6 +1,6 @@
 export const MODULE_VERSION = 'fenrua-521-mediator/v1';
 export const SEMANTIC_PROFILE_VERSION = 'fenrua-521-sem-001/v0.2';
-export const POLICY_VERSION = 'fenrua-521-policy/v1';
+export const POLICY_VERSION = 'fenrua-521-pol-001/v0.2';
 export const RECEIPT_VERSION = 'fenrua-521-receipt/v1';
 export const EVIDENCE_DISPOSITION_SCHEMA_VERSION = 'fenrua-521-disposition/v1';
 export const EVIDENCE_DISPOSITION_SCHEMA_DIGEST =

@@ -1,0 +1,129 @@
+# krn-pol-001-policy-rules-v0.2.yaml
+# Fenrua-521 Collaboration Pack v0.2
+# reconstruction_risk: low
+
+rule_set_version: "fenrua-521-pol-001/v0.2"
+applies_after: KRN-SEM-001
+fail_closed: true
+
+rules:
+
+  # ── Authority boundary ────────────────────────────────────────────────
+  - id: POL-001
+    name: no_signing
+    description: Any request or output that implies signing is refused.
+    trigger:
+      - task class contains sign / signature / signatory
+      - prohibited_actions would be required but model attempts to proceed
+    action: REFUSE
+    code: "AUTHORITY_SIGNING"
+
+  - id: POL-002
+    name: no_gate_or_activation
+    description: Gate open, deploy, activate, promote, or pass-gate language is refused.
+    trigger:
+      - keywords: open gate, approve gate, deploy, activate, promote candidate, mark PASS
+    action: REFUSE
+    code: "AUTHORITY_GATE_OR_ACTIVATION"
+
+  - id: POL-003
+    name: no_custody_or_treasury
+    description: Custody, treasury, balance movement, or payment authority is refused.
+    trigger:
+      - keywords: transfer, withdraw, custody, treasury, settle, post balance
+    action: REFUSE
+    code: "AUTHORITY_CUSTODY"
+
+  - id: POL-004
+    name: no_self_escalation
+    description: Model must not assume human authority roles or rewrite its own scope.
+    trigger:
+      - "you are now the"
+      - "act as head engineer"
+      - "I authorise you"
+      - "treat this as signed"
+    action: REFUSE
+    code: "AUTHORITY_SELF_ESCALATION"
+
+  # ── Tenancy & scope ───────────────────────────────────────────────────
+  - id: POL-005
+    name: no_caller_supplied_tenant
+    description: Tenant context is server-derived only.
+    trigger:
+      - caller attempts to set, switch, or supply tenant ID
+    action: REFUSE
+    code: "TENANT_CALLER_SUPPLIED"
+
+  - id: POL-006
+    name: no_cross_tenant
+    description: Any request that reaches across tenant boundaries is refused.
+    trigger:
+      - request names a second tenant
+      - request asks to merge or compare tenants
+    action: REFUSE
+    code: "TENANT_CROSS_SCOPE"
+
+  - id: POL-007
+    name: no_scope_expansion
+    description: Model cannot broaden the declared task scope or data class.
+    trigger:
+      - output attempts to include data outside the original claim_scope
+    action: CONTAIN
+    code: "SCOPE_EXPANSION"
+
+  # ── Disclosure & classification ───────────────────────────────────────
+  - id: POL-008
+    name: no_red_in_path
+    description: Red-classified material must never reach model output or logs.
+    trigger:
+      - any field with disclosure_class or classification == red
+    action: CONTAIN
+    code: "DISCLOSURE_RED"
+
+  - id: POL-009
+    name: no_amber_promotion
+    description: Amber material cannot be treated as Green by the model.
+    trigger:
+      - request to "treat as Green", "ignore classification", "downgrade Amber"
+    action: REFUSE
+    code: "DISCLOSURE_AMBER_PROMOTION"
+
+  - id: POL-010
+    name: no_raw_prompt_persistence
+    description: Raw prompt bodies or canary patterns are never persisted or echoed.
+    trigger:
+      - local canary match
+      - raw prompt-like content detected after intake
+    action: CONTAIN
+    code: "DISCLOSURE_RAW_OR_CANARY"
+
+  # ── Tool & egress boundary ────────────────────────────────────────────
+  - id: POL-011
+    name: allowlist_tools_only
+    description: Only registered logical tool IDs may be requested.
+    trigger:
+      - tool ID not in the local allowlist
+    action: REFUSE
+    code: "TOOL_NOT_ALLOWLISTED"
+
+  - id: POL-012
+    name: no_generic_proxy
+    description: No shell, filesystem browser, network proxy, or unrestricted retrieval.
+    trigger:
+      - request for arbitrary file read, shell, HTTP, or repository walk
+    action: REFUSE
+    code: "TOOL_GENERIC_PROXY"
+
+  - id: POL-013
+    name: no_external_egress
+    description: Model path must not initiate external network calls.
+    trigger:
+      - any attempt to reach non-loopback addresses
+    action: REFUSE
+    code: "EGRESS_BLOCKED"
+
+  # ── Outcome mapping ───────────────────────────────────────────────────
+outcome_map:
+  REFUSE: disposition = REFUSED_BY_POLICY
+  CONTAIN: disposition = CONTAINED_OR_OUT_OF_SCOPE
+    # No rule may emit EVIDENCE_SUFFICIENT_FOR_REVIEW; that is reserved for SEM + human review.

@@ -5,8 +5,8 @@
   "workspace_binding": {
     "binding_kind": "private standalone local worktree",
     "storage_target": "owner-controlled D: workspace",
-    "remote_repository": "none",
-    "publication": "forbidden without a separate owner decision"
+    "remote_repository": "private owner-controlled origin",
+    "publication": "private repository only; no public mirror without a separate owner decision"
   },
   "source_pack_binding": {
     "package_version": "0.2",
@@ -30,6 +30,17 @@
     "id": "KRN-SEM-001",
     "version": "fenrua-521-sem-001/v0.2",
     "sem_009_binding": "fact.evidence_ref resolves to exactly one evidence_refs.id; fact.source_digest resolves to exactly one integrity.source_bindings.source_digest; both classifications equal fact.disclosure_class."
+  },
+  "policy_profile": {
+    "id": "KRN-POL-001",
+    "file": "policy/krn-pol-001-policy-rules-v0.2.yaml",
+    "version": "fenrua-521-pol-001/v0.2",
+    "source_attachment_sha256": "sha256:b3c1b6d047f00946177c02269aee45acbd96704c5b50c945d09f7329bc2d6569",
+    "normalized_policy_sha256": "sha256:e15ab1c3973ff69938025d746f28ec5ebb93a3d0e17047b05dc12e4e1a7f138f",
+    "normalizations": [
+      "POL-004 trigger list split into four YAML list entries.",
+      "outcome_map moved from the rules sequence to the top level."
+    ]
   },
   "fixture_assets": {
     "eval_01_to_05": {
