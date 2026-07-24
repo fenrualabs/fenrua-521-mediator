@@ -1,11 +1,12 @@
 import { isPlainObject, sha256Binding } from './common.mjs';
 
 const TOOL_ID = 'KRN-FML-001';
-const INTERFACE_VERSION = 'fenrua-521-fml-001/v0.2';
+const INTERFACE_VERSION = 'fenrua-521-fml-001/v0.3';
 const CONTRACT_VERSION = 'fenrua-521-formula-contract/v1';
 const RECEIPT_VERSION = 'fenrua-521-formula-receipt/v1';
 const DIGEST = /^sha256:[a-f0-9]{64}$/;
 const SAFE_REASON = /^[A-Z][A-Z0-9_]{2,120}$/;
+const ASSURANCE_LEVELS = new Set(['reference', 'production']);
 const CORE_FORMULA_IDS = new Set([
   'F521-KEY-001',
   'F521-ID-001',
@@ -38,6 +39,14 @@ function validPublicResult(value) {
   return typeof value === 'boolean' || (typeof value === 'string' && DIGEST.test(value));
 }
 
+function validEvidence(evidence, assuranceLevel) {
+  if (!isPlainObject(evidence) || !DIGEST.test(evidence.vector_set_digest)) return false;
+  if (assuranceLevel === 'reference') return DIGEST.test(evidence.reference_profile_digest);
+  return DIGEST.test(evidence.reference_evidence_digest)
+    && DIGEST.test(evidence.independent_verifier_digest)
+    && DIGEST.test(evidence.approval_digest);
+}
+
 function validContract(contract, formulaId, version) {
   return isPlainObject(contract)
     && contract.formula_contract_version === CONTRACT_VERSION
@@ -47,6 +56,8 @@ function validContract(contract, formulaId, version) {
     && DIGEST.test(contract.source_digest)
     && DIGEST.test(contract.contract_digest)
     && contract.disclosure_class === 'amber'
+    && ASSURANCE_LEVELS.has(contract.assurance_level)
+    && validEvidence(contract.evidence, contract.assurance_level)
     && typeof contract.local_verifier === 'function';
 }
 
@@ -60,7 +71,12 @@ function createReceipt({ formulaId, version, disposition, reasonCode, publicInpu
     disposition,
     reason_code: reasonCode,
     public_inputs_digest: safeDigest(publicInputs),
-    ...(contract ? { source_digest: contract.source_digest, contract_digest: contract.contract_digest } : {}),
+    ...(contract ? {
+      assurance_level: contract.assurance_level,
+      source_digest: contract.source_digest,
+      contract_digest: contract.contract_digest,
+      vector_set_digest: contract.evidence.vector_set_digest,
+    } : {}),
   };
   const receiptDigest = sha256Binding(receipt);
   return Object.freeze({ ...receipt, receipt_digest: receiptDigest, immutable_reference: receiptDigest });
@@ -74,15 +90,16 @@ function result({ formulaId, version, disposition, reasonCode, publicInputs, con
     receipt_digest: receipt.receipt_digest,
     formula_id: formulaId,
     version,
+    ...(contract ? { assurance_level: contract.assurance_level } : {}),
     ...(publicResult !== undefined ? { public_result: publicResult } : {}),
     receipt,
   });
 }
 
 /**
- * Verifies a typed request only through a separately bound, local Amber Formula
- * Contract. No mathematical profile is embedded here and no prose can produce
- * a VERIFIED result.
+ * Verifies a typed request through a separately bound local Amber Formula
+ * Contract. A reference contract can establish executable test evidence, but
+ * only an evidence-complete production contract can emit VERIFIED.
  */
 export function verifyFormulaContract(request, { resolveContract } = {}) {
   const formulaId = safeFormulaId(isPlainObject(request) ? request.formula_id : undefined);
@@ -111,7 +128,8 @@ export function verifyFormulaContract(request, { resolveContract } = {}) {
       return result({ formulaId, version, disposition: 'REJECTED', reasonCode: 'FML_INVALID_LOCAL_VERDICT', publicInputs, contract });
     }
     if (!verdict.valid) return result({ formulaId, version, disposition: 'REJECTED', reasonCode: verdict.reason_code, publicInputs, contract });
-    return result({ formulaId, version, disposition: 'VERIFIED', reasonCode: verdict.reason_code, publicInputs, contract, publicResult: verdict.public_result });
+    const disposition = contract.assurance_level === 'production' ? 'VERIFIED' : 'REFERENCE_VERIFIED';
+    return result({ formulaId, version, disposition, reasonCode: verdict.reason_code, publicInputs, contract, publicResult: verdict.public_result });
   } catch {
     return result({ formulaId, version, disposition: 'REJECTED', reasonCode: 'FML_LOCAL_VERIFIER_REJECTED', publicInputs, contract });
   }

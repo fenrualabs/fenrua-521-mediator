@@ -5,3 +5,9 @@ export { evaluatePolicy } from './src/policy.mjs';
 export { createReceipt } from './src/receipt.mjs';
 export { processEvidenceRequest } from './src/pipeline.mjs';
 export { CORE_FORMULA_CONTRACT_IDS, verifyFormulaContract } from './src/formula.mjs';
+export {
+  computeReferenceEventCommitment,
+  createReferenceEventContract,
+  REFERENCE_EVENT_FORMULA_ID,
+  REFERENCE_EVENT_VERSION,
+} from './src/formula-reference.mjs';

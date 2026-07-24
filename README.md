@@ -40,7 +40,18 @@ The runner writes `evidence/baselines/fenrua-521-first-deterministic-baseline-v0
 It processes fixture metadata through the five KRN stages and records only
 bounded case metadata and receipts—never fixture prompt text.
 
-`KRN-FML-001` is a core Formula Contract boundary. It has no embedded
-production mathematics: a Formula Contract must be locally bound with a
-matching source digest, contract digest, version, and local Amber verifier
-before the interface can emit `VERIFIED`.
+`KRN-FML-001` has a two-step Formula Contract path. Its deterministic,
+Amber-local `F521-EVENT-001` reference profile provides an executable test
+base with exact encoding, fixed vectors, and bounded receipts. A passing
+reference run emits `REFERENCE_VERIFIED`, never a production claim.
+
+Run the reference evidence path privately:
+
+```text
+node bin/run-formula-reference.mjs
+```
+
+The production lock is separate: `VERIFIED` requires the production source,
+reference-evidence, independent-verifier, and owner-approval digests to be
+bound into a matching local Formula Contract. The full process is pinned in
+`formula/krn-fml-001-promotion-plan-v0.1.yaml`.

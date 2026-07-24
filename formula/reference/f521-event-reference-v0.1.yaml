@@ -1,0 +1,41 @@
+# F521-EVENT-001 deterministic reference profile
+# Status: REFERENCE_EXECUTION_READY
+# Classification: Amber local only. This is an executable test base, not a
+# production Formula Contract and not an authorization to claim production validity.
+
+formula_id: F521-EVENT-001
+version: reference-v1
+assurance_level: reference
+source_id: f521-event-reference-profile-v0.1
+hash_algorithm: SHA-256
+canonical_encoding:
+  description: "UTF-8 domain tag, one NUL byte, C_t, A_t, q as unsigned 64-bit big-endian, H_X, then nu"
+  domain_tag: F521-REFERENCE-EVENT-V1
+  fields:
+    - C_t: "32-byte lowercase hexadecimal string"
+    - A_t: "32-byte lowercase hexadecimal string"
+    - q: "decimal uint64 string"
+    - H_X: "32-byte lowercase hexadecimal string"
+    - nu: "32-byte lowercase hexadecimal string"
+    - claimed_commitment: "sha256 digest of the canonical encoding"
+
+public_symbolic_form: |
+  commitment = SHA-256(
+    UTF8("F521-REFERENCE-EVENT-V1") || 0x00 || C_t || A_t || uint64be(q) || H_X || nu
+  )
+
+input_rules:
+  - No unknown, omitted, or duplicate fields are accepted.
+  - C_t, A_t, H_X, and nu must be exactly 64 lowercase hexadecimal characters.
+  - q must be an unsigned decimal integer in the uint64 range.
+  - claimed_commitment must be a lowercase sha256 digest.
+
+promotion_gate:
+  reference_success_means: "The deterministic reference implementation matched a bounded public vector."
+  reference_success_does_not_mean: "Production algorithm, production domain binding, cryptographic security, or deployment authorization."
+  required_before_production_lock:
+    - "Approved production Formula Contract source and source digest."
+    - "Canonical production encoding and domain binding."
+    - "Approved vector set plus recorded reference evidence digest."
+    - "Independent verifier evidence digest."
+    - "Owner approval digest."

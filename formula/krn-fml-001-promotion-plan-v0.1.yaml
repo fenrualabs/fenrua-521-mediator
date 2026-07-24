@@ -1,0 +1,59 @@
+# KRN-FML-001 Formula Contract promotion plan
+# Status: ACTIVE_LOCAL_PROCESS
+# Classification: Amber local only
+
+process_id: KRN-FML-001-PROMOTION
+process_version: "fenrua-521-fml-promotion/v0.1"
+purpose: "Build executable Formula Contract evidence before considering any production lock."
+
+stages:
+  - stage: reference_profile
+    required_inputs:
+      - "Formula identifier and version"
+      - "Exact canonical encoding and domain binding"
+      - "Bounded public vector set"
+    required_outputs:
+      - "Reference profile digest"
+      - "Vector-set digest"
+      - "Deterministic local verifier"
+    permitted_result: REFERENCE_VERIFIED
+    prohibition: "Reference execution is not a production claim."
+
+  - stage: reference_evidence
+    prerequisite: reference_profile
+    required_outputs:
+      - "Recorded run receipt digests"
+      - "Outcome counts including negative cases"
+      - "Evidence package digest"
+    permitted_result: REFERENCE_EVIDENCE_RECORDED
+    prohibition: "A passing vector set does not lock a production contract."
+
+  - stage: production_candidate
+    prerequisite: reference_evidence
+    required_inputs:
+      - "Approved production Formula Contract source and source digest"
+      - "Canonical production encoding and domain binding"
+      - "Independent verifier evidence digest"
+      - "Owner approval digest"
+    permitted_result: CANDIDATE_READY_FOR_LOCK
+    prohibition: "No production VERIFIED result before all lock inputs are bound."
+
+  - stage: production_lock
+    prerequisite: production_candidate
+    lock_record_must_bind:
+      - "Formula Contract source digest"
+      - "Production vector-set digest"
+      - "Reference evidence package digest"
+      - "Independent verifier evidence digest"
+      - "Owner approval digest"
+    permitted_result: VERIFIED
+    prohibition: "The lock is based on the recorded evidence, not the proposal text."
+
+loop:
+  - "Review each proposed Formula Contract against local needs."
+  - "Implement or update the reference profile only where its encoding is explicit."
+  - "Run bounded positive and negative vectors locally."
+  - "Record receipts and evidence digest."
+  - "Use the evidence to decide whether a production candidate is ready; otherwise iterate."
+
+publication: "Private repository only; no public mirror without a separate owner decision."

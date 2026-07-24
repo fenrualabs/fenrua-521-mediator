@@ -1,0 +1,52 @@
+{
+  "evidence_version": "fenrua-521-formula-reference-evidence/v1",
+  "classification": "amber_local_only",
+  "build_state": "REFERENCE_EVIDENCE_RECORDED",
+  "production_lock": "NOT_REQUESTED",
+  "contract": {
+    "source_digest": "sha256:6c24c6b30bb5926533f6fa6603a86dde5f0475ab01d8b35b99fd04237d79db98",
+    "vector_set_digest": "sha256:9b9a15db62c43ef8a7078ed0b6c3b13ebfd4263d127d150b303d0618efa175b1",
+    "contract_digest": "sha256:9f2c88d1795da209ec9c7e5e21a4aa4a00ad18f14602e06f8d7b8ee3e0de1792"
+  },
+  "summary": {
+    "total": 4,
+    "reference_verified": 1,
+    "rejected": 3,
+    "error": 0
+  },
+  "outcomes": [
+    {
+      "case_id": "FML-REF-EVENT-001-PASS",
+      "expected_disposition": "REFERENCE_VERIFIED",
+      "actual_disposition": "REFERENCE_VERIFIED",
+      "reason_code": "FML_REFERENCE_EVENT_MATCH",
+      "receipt_digest": "sha256:24fe4f44cad9649dfc9cd495624402a0420a757c30c178a9a9a284fdebeb0a5f",
+      "passed": true
+    },
+    {
+      "case_id": "FML-REF-EVENT-002-MUTATED-COMMITMENT",
+      "expected_disposition": "REJECTED",
+      "actual_disposition": "REJECTED",
+      "reason_code": "FML_REFERENCE_EVENT_MISMATCH",
+      "receipt_digest": "sha256:4879101fad48673875e9f43c312650684ee5cb71a31a34626e06129f75c555c1",
+      "passed": true
+    },
+    {
+      "case_id": "FML-REF-EVENT-003-OUT-OF-RANGE-Q",
+      "expected_disposition": "REJECTED",
+      "actual_disposition": "REJECTED",
+      "reason_code": "FML_REFERENCE_EVENT_MALFORMED",
+      "receipt_digest": "sha256:5f5283aa45f5e013f2e47f5338adc9e4d1bf4cb7e5af16b4ecaf1b518f9317d1",
+      "passed": true
+    },
+    {
+      "case_id": "FML-REF-EVENT-004-NONCANONICAL-HEX",
+      "expected_disposition": "REJECTED",
+      "actual_disposition": "REJECTED",
+      "reason_code": "FML_REFERENCE_EVENT_MALFORMED",
+      "receipt_digest": "sha256:1a41212fb8ca60c9d81b5af722c8005305836405ddbb699e39e3cff603f4d4ef",
+      "passed": true
+    }
+  ],
+  "evidence_package_digest": "sha256:962c6fda9da4b1c91c2f7cdb2dde1ec256dba5df22d9a848885d6f5ad69a1712"
+}

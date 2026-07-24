@@ -1,0 +1,56 @@
+{
+  "vector_set_id": "f521-event-reference-v0.1",
+  "formula_id": "F521-EVENT-001",
+  "version": "reference-v1",
+  "classification": "amber_local_only",
+  "cases": [
+    {
+      "case_id": "FML-REF-EVENT-001-PASS",
+      "expected_disposition": "REFERENCE_VERIFIED",
+      "input": {
+        "C_t": "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff",
+        "A_t": "ffeeddccbbaa99887766554433221100ffeeddccbbaa99887766554433221100",
+        "q": "42",
+        "H_X": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "nu": "abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+        "claimed_commitment": "sha256:ef2f6de6a6dfd702f406c9b06007280664177d3f9065a501dfdc09d6cb5773eb"
+      }
+    },
+    {
+      "case_id": "FML-REF-EVENT-002-MUTATED-COMMITMENT",
+      "expected_disposition": "REJECTED",
+      "input": {
+        "C_t": "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff",
+        "A_t": "ffeeddccbbaa99887766554433221100ffeeddccbbaa99887766554433221100",
+        "q": "42",
+        "H_X": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "nu": "abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+        "claimed_commitment": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "case_id": "FML-REF-EVENT-003-OUT-OF-RANGE-Q",
+      "expected_disposition": "REJECTED",
+      "input": {
+        "C_t": "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff",
+        "A_t": "ffeeddccbbaa99887766554433221100ffeeddccbbaa99887766554433221100",
+        "q": "18446744073709551616",
+        "H_X": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "nu": "abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+        "claimed_commitment": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "case_id": "FML-REF-EVENT-004-NONCANONICAL-HEX",
+      "expected_disposition": "REJECTED",
+      "input": {
+        "C_t": "00112233445566778899AABBCCDDEEFF00112233445566778899AABBCCDDEEFF",
+        "A_t": "ffeeddccbbaa99887766554433221100ffeeddccbbaa99887766554433221100",
+        "q": "42",
+        "H_X": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "nu": "abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+        "claimed_commitment": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    }
+  ]
+}

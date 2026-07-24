@@ -63,16 +63,40 @@
   },
   "formula_interface": {
     "id": "KRN-FML-001",
-    "file": "formula/krn-fml-001-core-interface-v0.2.yaml",
-    "version": "fenrua-521-fml-001/v0.2",
+    "file": "formula/krn-fml-001-core-interface-v0.3.yaml",
+    "version": "fenrua-521-fml-001/v0.3",
     "source_attachment_sha256": "sha256:f2cb72eb718c61feb084b1872985a7df3d1a34877aa95343b475130e8001a7ff",
-    "interface_sha256": "sha256:0a6a14a790aaa74ecd2305bdc973e419fbf1632c8f9bce7c26b9c7f56ef10d23",
-    "implementation_sha256": "sha256:59352077231a245f20fbdd9f94c90e98f66d362da5d25315a278c9997fbd6973",
+    "interface_sha256": "sha256:56708bbc0826008b20aa1a597727ec2be041a599c770818c06dfc8346191a4cb",
+    "implementation_sha256": "sha256:5f4c1d6246e8d3aab00ab92ea60b384ff5f5de7e13617fa146e929d34ed1215a",
     "classification": "amber_local_only",
-    "contract_binding_status": "NO_APPROVED_FORMULA_CONTRACT_BOUND",
+    "contract_binding_status": "PRODUCTION_CONTRACT_UNBOUND_REFERENCE_AVAILABLE",
+    "reference_profile": {
+      "formula_id": "F521-EVENT-001",
+      "version": "reference-v1",
+      "file": "formula/reference/f521-event-reference-v0.1.yaml",
+      "profile_sha256": "sha256:6c24c6b30bb5926533f6fa6603a86dde5f0475ab01d8b35b99fd04237d79db98",
+      "vector_file": "formula/reference/f521-event-reference-v0.1-vectors.json",
+      "vector_set_sha256": "sha256:9b9a15db62c43ef8a7078ed0b6c3b13ebfd4263d127d150b303d0618efa175b1",
+      "implementation_file": "src/formula-reference.mjs",
+      "implementation_sha256": "sha256:a114ddd1feda45152c49ece666e3747e0736982ff2c4c38bbdca0c8bfa11ee96",
+      "evidence_status": "REFERENCE_EVIDENCE_RECORDED_NOT_PRODUCTION_LOCKED",
+      "evidence": {
+        "file": "evidence/formula/f521-event-reference-v0.1.json",
+        "sha256": "sha256:98ceb95bec60da34619d511dfa6daf7f8c1d889b42a82b3d58d8e5760a63a78d",
+        "evidence_package_digest": "sha256:962c6fda9da4b1c91c2f7cdb2dde1ec256dba5df22d9a848885d6f5ad69a1712",
+        "build_state": "REFERENCE_EVIDENCE_RECORDED",
+        "production_lock": "NOT_REQUESTED",
+        "summary": {"total": 4, "reference_verified": 1, "rejected": 3, "error": 0}
+      }
+    },
+    "promotion_plan": {
+      "file": "formula/krn-fml-001-promotion-plan-v0.1.yaml",
+      "sha256": "sha256:4e0ddc02d91a772ece2ef6796209ae05dc88d8f30170ef73a3ae382d6c9571b5"
+    },
     "normalizations": [
-      "The supplied toy arithmetic is not used as a core or production Formula Contract.",
-      "A VERIFIED result requires a matching local Amber Formula Contract, version, source digest, contract digest, and verifier."
+      "The supplied non-production source is used only as a reference pattern with explicit encoding and vectors.",
+      "Reference execution emits REFERENCE_VERIFIED and cannot authorize a production claim.",
+      "A VERIFIED result requires a matching production Formula Contract plus reference, independent-verifier, and owner-approval evidence digests."
     ]
   },
   "fixture_assets": {
@@ -143,7 +167,7 @@
     "network_egress": "forbidden",
     "model_endpoint_calling": "not implemented",
     "raw_input_persistence": "not implemented",
-    "formula_contract_resolution": "local Amber Formula Contract only; no production profile is bound",
+    "formula_contract_resolution": "local Amber reference or evidence-complete production Formula Contract only",
     "human_authority_required": true
   }
 }
