@@ -1,0 +1,163 @@
+# krn-sem-001-semantic-rules-v0.2.yaml
+# Fenrua-521 Collaboration Pack v0.2
+# reconstruction_risk: low
+# external_share: allowed after local review
+
+rule_set_version: "fenrua-521-sem-001/v0.2"
+applies_after: KRN-SCH-001
+fail_closed: true
+
+rules:
+
+  # ── Identity & uniqueness ──────────────────────────────────────────────
+  - id: SEM-001
+    name: unique_fact_ids
+    description: Every fact.fact_id must be unique within the record.
+    check: |
+      fact_ids = [f.fact_id for f in record.facts]
+      len(fact_ids) == len(set(fact_ids))
+    on_fail: REJECT
+    code: "DUPLICATE_FACT_ID"
+
+  - id: SEM-002
+    name: fact_id_format
+    description: fact_id must match ^F-[A-Za-z0-9_-]{1,80}$
+    check: all(re.match(r'^F-[A-Za-z0-9_-]{1,80}$', f.fact_id) for f in record.facts)
+    on_fail: REJECT
+    code: "INVALID_FACT_ID_FORMAT"
+
+  # ── Inference integrity ────────────────────────────────────────────────
+  - id: SEM-003
+    name: inference_depends_on_exists
+    description: Every inference.depends_on entry must reference an existing fact_id.
+    check: |
+      known = {f.fact_id for f in record.facts}
+      all(dep in known for inf in record.inferences for dep in inf.depends_on)
+    on_fail: REJECT
+    code: "DANGLING_INFERENCE_DEPENDENCY"
+
+  - id: SEM-004
+    name: inference_not_in_facts
+    description: An inference statement must never appear inside the facts array.
+    check: |
+      fact_statements = {f.statement for f in record.facts}
+      all(inf.statement not in fact_statements for inf in record.inferences)
+    on_fail: REJECT
+    code: "INFERENCE_PROMOTED_TO_FACT"
+
+  # ── Disposition-specific requirements ─────────────────────────────────
+  - id: SEM-005
+    name: sufficient_requires_evidence
+    description: |
+      EVIDENCE_SUFFICIENT_FOR_REVIEW requires:
+      - at least one evidence_ref
+      - every fact has evidence_ref + source_digest
+      - missing_evidence is empty
+    check: |
+      if record.disposition != "EVIDENCE_SUFFICIENT_FOR_REVIEW":
+        return True
+      return (len(record.evidence_refs) > 0
+              and all(f.evidence_ref and f.source_digest for f in record.facts)
+              and len(record.missing_evidence) == 0)
+    on_fail: REJECT
+    code: "SUFFICIENT_WITHOUT_COMPLETE_EVIDENCE"
+
+  - id: SEM-006
+    name: insufficient_requires_missing
+    description: INSUFFICIENT_EVIDENCE must list at least one missing_evidence item.
+    check: |
+      if record.disposition != "INSUFFICIENT_EVIDENCE":
+        return True
+      return len(record.missing_evidence) > 0
+    on_fail: REJECT
+    code: "INSUFFICIENT_WITHOUT_MISSING_LIST"
+
+  - id: SEM-007
+    name: conflicting_requires_conflicts
+    description: CONFLICTING_EVIDENCE must list at least one conflict.
+    check: |
+      if record.disposition != "CONFLICTING_EVIDENCE":
+        return True
+      return len(record.conflicts) > 0
+    on_fail: REJECT
+    code: "CONFLICTING_WITHOUT_CONFLICT_LIST"
+
+  - id: SEM-008
+    name: refused_requires_prohibited
+    description: REFUSED_BY_POLICY should surface at least one prohibited_action.
+    check: |
+      if record.disposition != "REFUSED_BY_POLICY":
+        return True
+      return len(record.prohibited_actions) > 0
+    on_fail: REJECT
+    code: "REFUSED_WITHOUT_PROHIBITED_ACTION"
+
+  # ── Source & classification integrity ─────────────────────────────────
+  - id: SEM-009
+    name: source_binding_classification
+    description: |
+      Every source_binding.classification must be green|amber|red
+      and must be consistent with the fact.disclosure_class that references it.
+    check: |
+      # structural schema already limits the enum;
+      # semantic check only enforces consistency when both are present
+      True  # placeholder for cross-reference when evidence_refs are linked
+    on_fail: REJECT
+    code: "SOURCE_CLASSIFICATION_MISMATCH"
+
+  - id: SEM-010
+    name: no_red_in_model_path
+    description: No fact, evidence_ref, or source_binding may carry disclosure_class=red.
+    check: |
+      all(f.disclosure_class != "red" for f in record.facts) and \
+      all(e.classification != "red" for e in record.evidence_refs) and \
+      all(s.classification != "red" for s in record.integrity.source_bindings)
+    on_fail: CONTAIN
+    code: "RED_DATA_IN_MODEL_PATH"
+
+  # ── Authority boundary ────────────────────────────────────────────────
+  - id: SEM-011
+    name: authority_status_consistency
+    description: |
+      If disposition is REFUSED_BY_POLICY or CONTAINED_OR_OUT_OF_SCOPE,
+      authority_status must not be human_decision_required in a way that
+      implies the model is escalating to itself.
+    check: |
+      if record.disposition in ("REFUSED_BY_POLICY", "CONTAINED_OR_OUT_OF_SCOPE"):
+        return record.authority_status in ("no_authority_requested", "refused")
+      return True
+    on_fail: REJECT
+    code: "AUTHORITY_STATUS_INCONSISTENT"
+
+  # ── Size & safety limits ──────────────────────────────────────────────
+  - id: SEM-012
+    name: record_size_limits
+    description: |
+      Soft limits to prevent resource abuse (exact numbers are local policy):
+      - facts ≤ 64
+      - inferences ≤ 32
+      - missing_evidence ≤ 32
+      - conflicts ≤ 16
+      - risks ≤ 16
+      - permitted_next_steps ≤ 16
+      - prohibited_actions ≤ 16
+    check: |
+      len(record.facts) <= 64 and
+      len(record.inferences) <= 32 and
+      len(record.missing_evidence) <= 32 and
+      len(record.conflicts) <= 16 and
+      len(record.risks) <= 16 and
+      len(record.permitted_next_steps) <= 16 and
+      len(record.prohibited_actions) <= 16
+    on_fail: REJECT
+    code: "RECORD_SIZE_LIMIT_EXCEEDED"
+
+  - id: SEM-013
+    name: no_raw_prompt_residue
+    description: |
+      The record must not contain fields or string values that look like
+      raw prompt bodies, API keys, or canary patterns.
+      (Actual canary values are injected only in local test fixtures.)
+    check: "local_canary_and_prompt_scanner(record) == clean"
+    on_fail: CONTAIN
+    code: "RAW_OR_CANARY_CONTENT_DETECTED"

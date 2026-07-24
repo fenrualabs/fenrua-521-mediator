@@ -24,3 +24,9 @@ profile, and KRN-REC-001 receipt profile are pinned in
 `module-manifest.json`. The fixture set is ready for local freeze; it has not
 been executed against a model endpoint, which this module deliberately does
 not provide.
+
+`corpus/green/fenrua-521-green-corpus-manifest-bootstrap-v0.2.yaml` binds the
+six supplied Green artifact families by content digest. It intentionally leaves
+the separately declared baseline acceptance specification unbound until its
+actual source artifact is supplied; it never infers a completed baseline from
+guidance material alone.

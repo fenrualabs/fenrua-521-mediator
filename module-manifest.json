@@ -29,6 +29,9 @@
   "semantic_profile": {
     "id": "KRN-SEM-001",
     "version": "fenrua-521-sem-001/v0.2",
+    "file": "semantic/krn-sem-001-semantic-rules-v0.2.yaml",
+    "source_attachment_sha256": "sha256:caab49d461718640c1efd4c7681799bd7c7b5180853a79206f711e8e7d36de8b",
+    "profile_sha256": "sha256:c750da8b005e7fd7d2e2e2f7790fde966fb8219a311bd1cae3790d1fa91c1723",
     "sem_009_binding": "fact.evidence_ref resolves to exactly one evidence_refs.id; fact.source_digest resolves to exactly one integrity.source_bindings.source_digest; both classifications equal fact.disclosure_class."
   },
   "policy_profile": {
@@ -82,6 +85,14 @@
     "declared_cases": 52,
     "fixture_status": "READY_FOR_LOCAL_FREEZE",
     "execution_status": "NOT_RUN_NO_MODEL_ENDPOINT"
+  },
+  "corpus_manifest": {
+    "file": "corpus/green/fenrua-521-green-corpus-manifest-bootstrap-v0.2.yaml",
+    "source_attachment_sha256": "sha256:e5d0a20ecefb345094f0008c9952b16738e6d250c369a65c0b62f3244c86bfc7",
+    "manifest_sha256": "sha256:dc7c11559fd075f8e17ab03ac8403e0598343c130f1d4b20679be053ae9c7620",
+    "bound_green_items": 6,
+    "pending_source_items": ["G-0007"],
+    "publication": "private repository only"
   },
   "behavioural_card_assets": {
     "green_v0_2": {

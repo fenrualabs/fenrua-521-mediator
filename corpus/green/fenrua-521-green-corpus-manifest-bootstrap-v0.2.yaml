@@ -1,0 +1,133 @@
+# fenrua-521-green-corpus-manifest-bootstrap-v0.2.yaml
+# Status: PROPOSAL — Green
+# reconstruction_risk: low
+
+manifest_version: "fenrua-521-corpus-manifest/v1"
+corpus_id: "green-corpus-20260725-baseline"
+build_state: READY_FOR_REVIEW
+classification: green
+contains_live_data: false
+source_attachment_sha256: "sha256:e5d0a20ecefb345094f0008c9952b16738e6d250c369a65c0b62f3244c86bfc7"
+publication: "private repository only; classification does not authorize public publication"
+manifest_digest_method: "sha256 of this UTF-8 file after replacing summary.manifest_digest with an empty string"
+corpus_controls:
+  prohibited_uses: [production_authority, activation, signing, custody, deployment]
+  local_implementation_rule: "Implementation files may verify a corpus item but are not Green corpus entries."
+  acceptance_spec_rule: "An acceptance spec is bound only when its own source artifact is supplied and pinned."
+
+items:
+  - item_id: "G-0001"
+    title: "KRN-SEM-001 semantic rule set"
+    origin: synthetic
+    source_of_truth: "KRN-SEM-001 Green proposal"
+    reconstruction_risk: low
+    external_share: allowed
+    allowed_uses: [evaluation, tuning]
+    review_state: ready_for_review
+    binding_state: bound
+    source_attachment_sha256: "sha256:caab49d461718640c1efd4c7681799bd7c7b5180853a79206f711e8e7d36de8b"
+    artifacts:
+      - path: "semantic/krn-sem-001-semantic-rules-v0.2.yaml"
+        sha256: "sha256:c750da8b005e7fd7d2e2e2f7790fde966fb8219a311bd1cae3790d1fa91c1723"
+        role: source_rule_set
+    local_normalization: "SEM-009 resolves each fact.evidence_ref and fact.source_digest exactly once; both linked classifications equal fact.disclosure_class."
+
+  - item_id: "G-0002"
+    title: "KRN-POL-001 policy rule set"
+    origin: synthetic
+    source_of_truth: "KRN-POL-001 Green proposal"
+    reconstruction_risk: low
+    external_share: allowed
+    allowed_uses: [evaluation, tuning]
+    review_state: ready_for_review
+    binding_state: bound
+    artifacts:
+      - path: "policy/krn-pol-001-policy-rules-v0.2.yaml"
+        sha256: "sha256:e15ab1c3973ff69938025d746f28ec5ebb93a3d0e17047b05dc12e4e1a7f138f"
+        role: normalized_rule_set
+
+  - item_id: "G-0003"
+    title: "KRN-INT-001 intake rule set"
+    origin: synthetic
+    source_of_truth: "KRN-INT-001 Green proposal"
+    reconstruction_risk: low
+    external_share: allowed
+    allowed_uses: [evaluation]
+    review_state: ready_for_review
+    binding_state: bound
+    artifacts:
+      - path: "intake/krn-int-001-intake-v0.2.yaml"
+        sha256: "sha256:1ba1bfe7af8a440da553f16ac28aad54929a09179ab19c9dbd9faf33d39aff39"
+        role: source_rule_set
+
+  - item_id: "G-0004"
+    title: "KRN-REC-001 receipt definition"
+    origin: synthetic
+    source_of_truth: "KRN-REC-001 Green proposal"
+    reconstruction_risk: low
+    external_share: allowed
+    allowed_uses: [evaluation]
+    review_state: ready_for_review
+    binding_state: bound
+    artifacts:
+      - path: "receipt/krn-rec-001-receipt-v0.2.yaml"
+        sha256: "sha256:e3afcce93b9681e864efcaad591f0e411e3caed5b56d50119ad4337679e782f4"
+        role: source_rule_set
+
+  - item_id: "G-0005"
+    title: "52 evaluation fixtures EVAL-01 to EVAL-08"
+    origin: synthetic
+    source_of_truth: "Green EVAL fixture proposals"
+    reconstruction_risk: low
+    external_share: allowed
+    allowed_uses: [evaluation]
+    review_state: ready_for_review
+    binding_state: bound
+    artifacts:
+      - path: "fixtures/green/fenrua-521-eval-01-to-05-complete-v0.2.yaml"
+        sha256: "sha256:ff2801f4113e499d10d2b557abdfd1cbb908479b190d2a2689b5dd00649fc06a"
+        role: evaluation_fixture_pack
+      - path: "fixtures/green/fenrua-521-eval-06-to-08-v0.2.yaml"
+        sha256: "sha256:02eb5cac03fc55849fb21b4a3714f3d82cfc30bc0435097bb954c3967f69e96d"
+        role: evaluation_fixture_pack
+
+  - item_id: "G-0006"
+    title: "12 behavioural cards"
+    origin: synthetic
+    source_of_truth: "Green behavioural-card proposal"
+    reconstruction_risk: low
+    external_share: allowed
+    allowed_uses: [tuning, evaluation]
+    review_state: ready_for_review
+    binding_state: bound
+    artifacts:
+      - path: "fixtures/green/fenrua-521-green-behavioural-cards-v0.2.yaml"
+        sha256: "sha256:b7d4ee53af85385d73491f1263d03dcc6b3a4ea351b5d35827cf340f68a2f32e"
+        role: behavioural_card_pack
+
+  - item_id: "G-0007"
+    title: "First baseline acceptance spec"
+    origin: synthetic
+    source_of_truth: "Not supplied"
+    reconstruction_risk: low
+    external_share: allowed
+    allowed_uses: [evaluation]
+    review_state: ready_for_review
+    binding_state: pending_source
+    binding_note: "Declared by the bootstrap proposal, but no acceptance-spec source file has been supplied or retained locally."
+
+local_verification_bindings:
+  - item_id: "G-0001"
+    implementation_path: "src/semantic.mjs"
+    implementation_sha256: "sha256:4d971d98270c81f02157f3e8991fff65c56cd2f34c2686b1cacd9e6b15a268ab"
+    disclosure: local_only
+    purpose: "Verifies the locally frozen SEM-009 convention without making implementation code a corpus item."
+
+summary:
+  total_items: 7
+  bound_items: 6
+  pending_source_items: 1
+  rejected_items: 0
+  amber_or_red_items: 0
+  disclosure_lint_result: READY_TO_EXECUTE
+  manifest_digest: "sha256:36e6564c39f8af22ec7f130fa4c64c03738725a4ae27e1f575384115f96404cb"
