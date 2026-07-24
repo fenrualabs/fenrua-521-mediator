@@ -12,12 +12,14 @@ an evidence-disposition record, and returns a bounded receipt. The caller is
 responsible for retaining receipts in an approved local store; this module
 never retains a raw request body.
 
-Run its focused tests from the kernel root:
+Run its focused tests from this private workspace:
 
 ```text
-node --test mediator/test/*.test.mjs
+node --test test/*.test.mjs
 ```
 
-The imported schemas and Green fixture suite are pinned in
-`module-manifest.json`. The behavioural-card corpus is intentionally absent
-until it has been individually reviewed.
+The imported schemas, Green fixture suite, and first twelve reviewed Green
+behavioural cards are pinned in `module-manifest.json`. EVAL-07 and EVAL-08
+references in the cards remain deferred until their dedicated fixture suites
+are added; they are not counted as part of the current EVAL-01 through EVAL-05
+baseline.

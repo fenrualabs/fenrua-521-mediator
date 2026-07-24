@@ -1,7 +1,7 @@
 {
   "module_id": "fenrua-521-kernel-mediator",
   "module_version": "0.1.0-local",
-  "status": "BUILDING",
+  "status": "READY_FOR_LOCAL_VERIFICATION",
   "workspace_binding": {
     "binding_kind": "private standalone local worktree",
     "storage_target": "owner-controlled D: workspace",
@@ -38,6 +38,17 @@
       "fixture_sha256": "sha256:ff2801f4113e499d10d2b557abdfd1cbb908479b190d2a2689b5dd00649fc06a",
       "classification": "green",
       "declared_cases": 34
+    }
+  },
+  "behavioural_card_assets": {
+    "green_v0_2": {
+      "file": "fixtures/green/fenrua-521-green-behavioural-cards-v0.2.yaml",
+      "source_attachment_sha256": "sha256:cbf22b0b6da5f7314015fab8a0d0cf2b80e826cc83a3c67cf55b709c47798bf5",
+      "card_set_sha256": "sha256:b7d4ee53af85385d73491f1263d03dcc6b3a4ea351b5d35827cf340f68a2f32e",
+      "classification": "green",
+      "declared_cards": 12,
+      "baseline_evaluation_suites": ["EVAL-01", "EVAL-02", "EVAL-03", "EVAL-04", "EVAL-05"],
+      "deferred_evaluation_suites": ["EVAL-07", "EVAL-08"]
     }
   },
   "pipeline_order": [
