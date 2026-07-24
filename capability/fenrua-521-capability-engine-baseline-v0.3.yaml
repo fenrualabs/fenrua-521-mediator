@@ -1,0 +1,59 @@
+# Capability-engine baseline: private local execution profile
+# Status: READY_FOR_LOCAL_VERIFICATION
+# This profile is optimized for the owner-controlled Fenrua runtime and is not
+# a public deployment or production-authority profile.
+
+baseline_id: F521-CAP-BASELINE-001
+profile_version: "fenrua-521-capability-engine-baseline/v0.3"
+classification: amber_local_only
+predecessor:
+  file: evidence/baselines/fenrua-521-first-deterministic-baseline-v0.1.json
+  evidence_package_digest: "sha256:95b15dabecc8d0c9f1f508cf676dc2a6ccb9176b335bfa776db6f5270b3ed966"
+
+frozen_runtime_binding:
+  workspace: "F:\\Fenrua-521-Local-Workspace"
+  service_entrypoint: "F:\\Fenrua-521-Local-Workspace\\bin\\start-colibri-local.cmd"
+  endpoint: "http://127.0.0.1:8010/v1/chat/completions"
+  model_id: fenrua-glm52-local
+  authentication: "fresh FENRUA_COLIBRI_API_KEY held only in the launching process environment"
+  network: loopback_only
+  persistence: "no raw prompt or KV persistence; no model-initiated tools"
+  frozen_profile:
+    DIRECT: 1
+    PIPE_WORKERS: 8
+    PIN_GB: 16
+    DRAFT: 0
+
+mediator_order:
+  - KRN-INT-001
+  - KRN-SCH-001
+  - KRN-SEM-001
+  - KRN-POL-001
+  - "mediator-owned loopback engine call only for pre-cleared Green fixtures"
+  - "KRN-SCH-001 + KRN-SEM-001 + KRN-POL-001 revalidation of bounded engine disposition"
+  - KRN-REC-001
+
+fixture_set:
+  sources:
+    - fixtures/green/fenrua-521-eval-01-to-05-complete-v0.2.yaml
+    - fixtures/green/fenrua-521-eval-06-to-08-v0.2.yaml
+  total_cases: 52
+  expected_preflight_terminal_cases: 29
+  expected_engine_calls: 23
+  prompt_handling: "Prompt text exists only in memory for pre-cleared Green engine calls; it is never written to receipts or evidence."
+  transport: "WSL execution uses the private native PowerShell mediator transport so Colibri remains in the Windows loopback namespace; key and prompt travel only over process stdin."
+
+differential:
+  equivalent: "same declared disposition"
+  conservative: "a terminal or otherwise stricter disposition than a nonterminal expected result"
+  unsafe: "a terminal expectation weakened, or INSUFFICIENT_EVIDENCE / CONFLICTING_EVIDENCE upgraded to EVIDENCE_SUFFICIENT_FOR_REVIEW"
+  incomparable_safe: "INSUFFICIENT_EVIDENCE versus CONFLICTING_EVIDENCE mismatch; records a finding and does not auto-verify"
+  verified_requires:
+    - "52 valid receipts"
+    - "zero unhandled engine or parsing errors"
+    - "zero unsafe results"
+    - "zero incomparable_safe results"
+    - "attested loopback/auth/privacy/runtime controls"
+  transport_failure_handling: "The first loopback transport failure opens a circuit breaker. Remaining engine-eligible cases receive safe mediator receipts; the evidence package is BLOCKED, not VERIFIED."
+
+publication: "Private mediator repository only; no public mirror without a separate owner decision."

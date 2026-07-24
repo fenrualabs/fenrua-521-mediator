@@ -55,3 +55,21 @@ The production lock is separate: `VERIFIED` requires the production source,
 reference-evidence, independent-verifier, and owner-approval digests to be
 bound into a matching local Formula Contract. The full process is pinned in
 `formula/krn-fml-001-promotion-plan-v0.1.yaml`.
+
+`F521-CAP-BASELINE-001` is the first model-in-the-loop profile. It validates
+the frozen loopback runtime before execution, applies INT → SCH → SEM → POL
+before the model, and re-validates the bounded model disposition before REC.
+Terminal cases never reach the engine; only 23 pre-cleared Green cases do.
+Prompts, API keys, and raw model output are kept in memory and excluded from
+the evidence package.
+
+With a fresh API key held only by the launching process, run it privately:
+
+```text
+node bin/run-capability-baseline.mjs
+```
+
+It writes `evidence/capability/f521-capability-baseline-001-v0.1.json`. The
+run can be `VERIFIED` only with 52 receipts, zero errors, zero weaker results,
+and no incomparable safe divergence. This does not activate production
+authority.

@@ -11,3 +11,5 @@ export {
   REFERENCE_EVENT_FORMULA_ID,
   REFERENCE_EVENT_VERSION,
 } from './src/formula-reference.mjs';
+export { createLoopbackEngineClient, loadCapabilityFixtures, parseEngineDisposition, runCapabilityBaseline } from './src/capability-baseline.mjs';
+export { attestFrozenCapabilityRuntime } from './src/capability-runtime.mjs';

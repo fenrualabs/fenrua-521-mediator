@@ -99,6 +99,46 @@
       "A VERIFIED result requires a matching production Formula Contract plus reference, independent-verifier, and owner-approval evidence digests."
     ]
   },
+  "capability_engine_baseline": {
+    "id": "F521-CAP-BASELINE-001",
+    "file": "capability/fenrua-521-capability-engine-baseline-v0.3.yaml",
+    "version": "fenrua-521-capability-engine-baseline/v0.3",
+    "profile_sha256": "sha256:903a02b0f100a5c2cdc929f6b385883dfac6bd81cee491889a1a9cf30d5e07c7",
+    "classification": "amber_local_only",
+    "status": "BLOCKED_LOOPBACK_TRANSPORT_TIMEOUT",
+    "runner": {
+      "file": "src/capability-baseline.mjs",
+      "sha256": "sha256:5eed607bf69539362b4c38741c4d434c45672d88205410dc1e06a4447804b5aa",
+      "runtime_attestor": "src/capability-runtime.mjs",
+      "runtime_attestor_sha256": "sha256:9935e6b38bb37f1c701f2f31b1417653bd6eff4e6b5fe5dff8f6ca24eaccced2",
+      "entrypoint": "bin/run-capability-baseline.mjs",
+      "entrypoint_sha256": "sha256:24db3fd0c1dc98dc5574972fea5756f43639a70fccfef0c115b6832a2bd274c4",
+      "native_loopback_transport": "bin/invoke-colibri-mediator.ps1",
+      "native_loopback_transport_sha256": "sha256:7177d8cf8bd463095574a54da2bc7b289dc94beadd6b98485e302025109a9d96"
+    },
+    "frozen_runtime_attestation": {
+      "candidate_id": "fenrua-glm52-local-cuda-sm86/v1",
+      "runtime_digest": "sha256:e79fa15fe6b190d8c3fcccae188a1b80991395a2a2898780fdfb741cdcdac0c8",
+      "model_inventory_digest": "sha256:dd38c5af99856549ca7cbe5efe0d835369b9462170f15c19143dfcb1b46384d0",
+      "model_inventory_kind": "ordered_shard_name_and_size_inventory_not_full_weight_content_hash",
+      "shard_count": 144,
+      "attestation_scope": "Pinned F: runtime artifacts and D: shard inventory; no engine start and no full weight-content hash."
+    },
+    "execution": {
+      "engine_calls_expected": 23,
+      "preflight_terminal_expected": 29,
+      "evidence_status": "BLOCKED_LOOPBACK_TRANSPORT_TIMEOUT",
+      "evidence": {
+        "file": "evidence/capability/f521-capability-baseline-001-v0.1.json",
+        "sha256": "sha256:8ccbea652392bce93110012aea55cb19411a8aaaab61edeb77f3c077d549b83a",
+        "evidence_package_digest": "sha256:d8a3fd4af84362efda2d1771686e890af28569c35d7f48ead60aeef004affe98",
+        "build_state": "BLOCKED",
+        "summary": {"total": 52, "engine_calls": 1, "engine_skipped_after_failure": 22, "preflight_terminal": 29, "receipt_valid": 52, "schema_valid": 29, "weakened": 0, "errors": 1},
+        "reason": "The bounded native loopback mediator transport did not receive a response before its timeout."
+      }
+    },
+    "publication": "private repository only; no public mirror without a separate owner decision"
+  },
   "fixture_assets": {
     "eval_01_to_05": {
       "file": "fixtures/green/fenrua-521-eval-01-to-05-complete-v0.2.yaml",
