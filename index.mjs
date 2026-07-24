@@ -13,3 +13,10 @@ export {
 } from './src/formula-reference.mjs';
 export { createLoopbackEngineClient, loadCapabilityFixtures, parseEngineDisposition, runCapabilityBaseline } from './src/capability-baseline.mjs';
 export { attestFrozenCapabilityRuntime } from './src/capability-runtime.mjs';
+export {
+  compareDifferentialCase,
+  DIFFERENTIAL_BASELINE_ID,
+  DIFFERENTIAL_PROFILE_VERSION,
+  dispositionRelation,
+  runDifferentialBaseline,
+} from './src/differential.mjs';

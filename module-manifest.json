@@ -15,6 +15,13 @@
     "checksum_manifest_sha256": "sha256:ad6bd0678f2de02e086e72b5be4964e8f7cbc6e040b144ce606790a40e5eea98",
     "verification": "Fenrua pack verified: 21 pinned files."
   },
+  "p_n521_validator": {
+    "id": "P/N521 source-pack verifier",
+    "file": "F:\\Fenrua-521-Local-Workspace\\bin\\verify-pack.ps1",
+    "sha256": "sha256:089f86f7486df91c636809e5eba8d962060ed9bd78fa5ce9406a26ccccdee2cf",
+    "result": "VERIFIED_21_PINNED_INPUT_FILES",
+    "scope": "Pinned collaboration-pack source integrity only; a model completion still requires a mediated response receipt."
+  },
   "schema_assets": {
     "evidence_disposition": {
       "file": "schemas/evidence-disposition.schema.json",
@@ -130,12 +137,35 @@
       "evidence_status": "BLOCKED_LOOPBACK_TRANSPORT_TIMEOUT",
       "evidence": {
         "file": "evidence/capability/f521-capability-baseline-001-v0.1.json",
-        "sha256": "sha256:8ccbea652392bce93110012aea55cb19411a8aaaab61edeb77f3c077d549b83a",
-        "evidence_package_digest": "sha256:d8a3fd4af84362efda2d1771686e890af28569c35d7f48ead60aeef004affe98",
+        "sha256": "sha256:3243ddc44bc35088a00aca2b93f6ca4496dc5e67d3166b23e6e2449efab32dfc",
+        "evidence_package_digest": "sha256:ad36e4c73d0f524316dd96044c3311af5f5e1a206aa405383f5c5b265f1d370d",
         "build_state": "BLOCKED",
         "summary": {"total": 52, "engine_calls": 1, "engine_skipped_after_failure": 22, "preflight_terminal": 29, "receipt_valid": 52, "schema_valid": 29, "weakened": 0, "errors": 1},
         "reason": "The bounded native loopback mediator transport did not receive a response before its timeout."
       }
+    },
+    "publication": "private repository only; no public mirror without a separate owner decision"
+  },
+  "differential_comparison": {
+    "id": "KRN-DIF-001",
+    "file": "differential/krn-dif-001-differential-rules-v0.3.yaml",
+    "version": "fenrua-521-dif-001/v0.3",
+    "profile_sha256": "sha256:93af50ae8e486b3bec42a34cfe889f0e6608583e7f64251fef48d54b5089a8b7",
+    "classification": "amber_local_only",
+    "runner": {
+      "file": "src/differential.mjs",
+      "sha256": "sha256:7df78d2c5e3ea1c2f3db7a30041576c2165abbcd2de65bb9190362e7cddbe7d3",
+      "entrypoint": "bin/run-differential-baseline.mjs",
+      "entrypoint_sha256": "sha256:c88ad14739e7618957cbc24286caaac00e6aef24cb49652c719e7b9ef13f6d4c"
+    },
+    "evidence_gate": "P/N521 verifies pinned inputs; a differential baseline verifies only when all required mediated receipt references are complete and no unsafe result exists.",
+    "execution": {
+      "file": "evidence/differential/f521-differential-baseline-001-v0.1.json",
+      "sha256": "sha256:883fb83a298e5e438efe00ef80d3daace862ff0e37aa110c9b44288c9c00ca82",
+      "evidence_package_digest": "sha256:aba73ba0a62759b9ec99b331285bc9fad1abb95279f2715abe6bf999a034c131",
+      "build_state": "BLOCKED",
+      "summary": {"equivalent": 29, "conservative": 0, "unsafe": 0, "divergent": 0, "incomplete": 23, "total": 52},
+      "reason": "The first real loopback capability run returned no bounded model completion; its circuit-breaker cases remain incomplete rather than being promoted to conservative outcomes."
     },
     "publication": "private repository only; no public mirror without a separate owner decision"
   },

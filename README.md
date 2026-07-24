@@ -73,3 +73,20 @@ It writes `evidence/capability/f521-capability-baseline-001-v0.1.json`. The
 run can be `VERIFIED` only with 52 receipts, zero errors, zero weaker results,
 and no incomparable safe divergence. This does not activate production
 authority.
+
+`KRN-DIF-001` compares the deterministic and capability evidence packages
+without calling a model or re-running a fixture. It verifies both package
+digests, requires matching fixture bindings, and emits bounded differential
+receipts. It uses a partial safety order: insufficient and conflicting
+evidence are incomparable, as are refused and contained boundary outcomes.
+
+Run it privately:
+
+```text
+node bin/run-differential-baseline.mjs
+```
+
+It writes `evidence/differential/f521-differential-baseline-001-v0.1.json`.
+The current blocked capability package therefore yields 29 `equivalent` and
+23 `incomplete` comparisons; circuit-breaker refusals are not counted as
+successful conservative model outcomes.
