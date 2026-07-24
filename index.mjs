@@ -28,3 +28,12 @@ export {
   dispositionRelation,
   runDifferentialBaseline,
 } from './src/differential.mjs';
+export {
+  buildPreferenceDataPackage,
+  PREFERENCE_DATA_PACKAGE_ID,
+  PREFERENCE_DATA_PACKAGE_VERSION,
+  PREFERENCE_OBJECTIVE_ID,
+  PREFERENCE_OBJECTIVE_VERSION,
+  runPreferenceObjective,
+  verifyPreferenceDataPackage,
+} from './src/preference-objective.mjs';

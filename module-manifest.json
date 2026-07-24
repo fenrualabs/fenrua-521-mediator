@@ -195,6 +195,41 @@
     },
     "publication": "private repository only; no public mirror without a separate owner decision"
   },
+  "specialist_preference_objective": {
+    "objective": {
+      "id": "F521-PREF-001",
+      "version": "fenrua-521-specialist-preference-objective/v0.4",
+      "source_proposal_sha256": "sha256:4c1fee0a23dd3696caa5fcd4db167fc59fc8af823e62b9164534f9ed09dcd661",
+      "file": "preference/fenrua-521-specialist-preference-objective-v0.4.yaml",
+      "sha256": "sha256:bc20787ab59dd4e40210a832d3c3ef215f5e3b61373e2d2929ebf95de4283699"
+    },
+    "normalization": "A mediator terminal result is reported as system-boundary evidence only. It is never promoted into a claim about a model that was not called. NEEDS_EVIDENCE is not candidate success.",
+    "data_package": {
+      "file": "preference/f521-pref-001-data-package-v0.1.json",
+      "sha256": "sha256:4b6edf468f99357c70e5016ec69638b4bd81d4044347cd826ea7a8d9501448ca",
+      "package_digest": "sha256:4914b53c19d16f5688fb01b2efc0061a0729e50498baaeb75eb49c4d45cba859",
+      "coverage": {"reviewed_green_cards": 12, "frozen_green_cases": 52, "synthetic_formula_vectors": 10},
+      "scope": "Digest-bound local source-admission index only; it is not a training export or a training run."
+    },
+    "implementation": {
+      "file": "src/preference-objective.mjs",
+      "sha256": "sha256:46837046860c4ebccea20991b838d98fe859bb3125c44c26bbc883a316d83ef3",
+      "package_entrypoint": "bin/build-preference-data-package.mjs",
+      "package_entrypoint_sha256": "sha256:dccf2d85ecb311c0927d8fa7fccfcdb7d81fa482b90a0815dd2b243b7326f0ff",
+      "evaluation_entrypoint": "bin/run-specialist-preference-objective.mjs",
+      "evaluation_entrypoint_sha256": "sha256:a76ba6bc55c327ef68d2d799f5115c94bbd94d3896a4e2907754088ef46d18fe"
+    },
+    "execution": {
+      "file": "evidence/preference/f521-pref-001-preflight-v0.1.json",
+      "sha256": "sha256:3f9ebceec5a78b1d0341a6cd7e89093dbc1156474867a3a623b6aecde71f40cf",
+      "evidence_package_digest": "sha256:3e3c911213606d728b31784565c4974edd74148737cd45711de62607fc4b2bde",
+      "build_state": "NEEDS_EVIDENCE",
+      "candidate_success": false,
+      "model_coverage": {"engine_eligible_cases": 23, "valid_bounded_model_responses": 0},
+      "reason": "The current real loopback baseline is BLOCKED after its first bounded engine call timed out; it provides no valid model response to score."
+    },
+    "publication": "private repository only; NEEDS_EVIDENCE is ineligible for public evidence publication"
+  },
   "inter_engine_envelope_validation": {
     "id": "KRN-ENV-001",
     "profile": {

@@ -121,3 +121,28 @@ It writes `evidence/differential/f521-differential-baseline-001-v0.1.json`.
 The current blocked capability package therefore yields 29 `equivalent` and
 23 `incomplete` comparisons; circuit-breaker refusals are not counted as
 successful conservative model outcomes.
+
+`F521-PREF-001` is the private specialist-preference objective. It packages
+only a SHA-256-bound index of the reviewed Green cards, frozen Green fixtures,
+and explicitly synthetic Formula test vectors. It is not a training run, it
+does not duplicate prompts or Formula inputs, and it cannot activate a model.
+
+Build the private source-admission index:
+
+```text
+node bin/build-preference-data-package.mjs
+```
+
+Then evaluate the current evidence without making a model call:
+
+```text
+node bin/run-specialist-preference-objective.mjs
+```
+
+The resulting `evidence/preference/f521-pref-001-preflight-v0.1.json` is
+currently `NEEDS_EVIDENCE`: the genuine loopback baseline has zero valid
+bounded model responses out of 23 engine-eligible cases. Authority,
+cross-tenant, and injection cases were successfully terminated by the
+mediator before the engine ran; that is a boundary result, not a claim that
+the uncalled model itself refused them. This evidence is private and is not
+eligible for public publication.
