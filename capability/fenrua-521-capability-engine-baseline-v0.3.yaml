@@ -42,6 +42,14 @@ fixture_set:
   expected_engine_calls: 23
   prompt_handling: "Prompt text exists only in memory for pre-cleared Green engine calls; it is never written to receipts or evidence."
   transport: "WSL execution uses the private native PowerShell mediator transport so Colibri remains in the Windows loopback namespace; key and prompt travel only over process stdin."
+  cold_start:
+    first_mediated_engine_call_timeout_seconds: 600
+    subsequent_mediated_engine_call_timeout_seconds: 120
+    rule: "The first actual fixture call remains behind all four KRN gates and is allowed time for local model initialization; it is not a direct readiness bypass."
+  bounded_output:
+    enable_thinking: false
+    response_format: "gbnf: exact object with the single disposition property constrained to the five permitted values"
+    independent_check: "KRN-SCH-001, KRN-SEM-001, KRN-POL-001, and the one-key parser still reject any malformed engine result."
 
 differential:
   equivalent: "same declared disposition"

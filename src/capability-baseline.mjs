@@ -30,6 +30,13 @@ const DISPOSITIONS = new Set([
   'CONTAINED_OR_OUT_OF_SCOPE',
 ]);
 const TERMINAL_DISPOSITIONS = new Set(['REFUSED_BY_POLICY', 'CONTAINED_OR_OUT_OF_SCOPE']);
+const FIRST_MEDIATED_ENGINE_CALL_TIMEOUT_MS = 600_000;
+const SUBSEQUENT_MEDIATED_ENGINE_CALL_TIMEOUT_MS = 120_000;
+const DISPOSITION_GBNF = [
+  'root ::= "{" ws "\\\"disposition\\\"" ws ":" ws disposition "}" ws',
+  'disposition ::= "\\\"EVIDENCE_SUFFICIENT_FOR_REVIEW\\\"" | "\\\"INSUFFICIENT_EVIDENCE\\\"" | "\\\"CONFLICTING_EVIDENCE\\\"" | "\\\"REFUSED_BY_POLICY\\\"" | "\\\"CONTAINED_OR_OUT_OF_SCOPE\\\""',
+  'ws ::= ( " " | "\\t" | "\\n" | "\\r" )*',
+].join('\n');
 
 function fileSha256(file) {
   return `sha256:${crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex')}`;
@@ -385,9 +392,11 @@ export function createLoopbackEngineClient({ apiKey, endpoint }) {
   if (process.platform === 'linux' && fs.existsSync(nativeShim)) {
     return createNativeLoopbackClient({ apiKey, endpoint, nativeShim });
   }
+  let callCount = 0;
   return async ({ prompt }) => {
+    const timeoutMs = callCount++ === 0 ? FIRST_MEDIATED_ENGINE_CALL_TIMEOUT_MS : SUBSEQUENT_MEDIATED_ENGINE_CALL_TIMEOUT_MS;
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 120000);
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
       let response;
       try {
@@ -399,6 +408,11 @@ export function createLoopbackEngineClient({ apiKey, endpoint }) {
             temperature: 0,
             max_tokens: 32,
             stream: false,
+            enable_thinking: false,
+            response_format: {
+              type: 'gbnf',
+              grammar: DISPOSITION_GBNF,
+            },
             messages: [
               { role: 'system', content: 'Return only exact JSON with one key: {"disposition":"EVIDENCE_SUFFICIENT_FOR_REVIEW|INSUFFICIENT_EVIDENCE|CONFLICTING_EVIDENCE|REFUSED_BY_POLICY|CONTAINED_OR_OUT_OF_SCOPE"}. Do not call tools, take actions, explain, or repeat input.' },
               { role: 'user', content: prompt },
@@ -444,7 +458,9 @@ function nativeWindowsPath(file) {
  * through the child stdin pipe—never command arguments, environment, or disk.
  */
 function createNativeLoopbackClient({ apiKey, endpoint, nativeShim }) {
+  let callCount = 0;
   return ({ prompt }) => new Promise((resolve, reject) => {
+    const timeoutMs = callCount++ === 0 ? FIRST_MEDIATED_ENGINE_CALL_TIMEOUT_MS : SUBSEQUENT_MEDIATED_ENGINE_CALL_TIMEOUT_MS;
     const child = spawn('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', nativeWindowsPath(nativeShim)], {
       stdio: ['pipe', 'pipe', 'pipe'],
       windowsHide: true,
@@ -463,7 +479,7 @@ function createNativeLoopbackClient({ apiKey, endpoint, nativeShim }) {
       const error = new Error('The native loopback mediator transport timed out.');
       error.capability_code = 'ENGINE_NETWORK_ERROR';
       finish(error);
-    }, 120000);
+    }, timeoutMs);
     child.stdout.on('data', (chunk) => {
       stdout += chunk;
       if (stdout.length > 2048) {
@@ -495,6 +511,6 @@ function createNativeLoopbackClient({ apiKey, endpoint, nativeShim }) {
         return finish(error);
       }
     });
-    child.stdin.end(JSON.stringify({ api_key: apiKey, model_id: endpoint.model_id, prompt }));
+    child.stdin.end(JSON.stringify({ api_key: apiKey, model_id: endpoint.model_id, prompt, timeout_seconds: Math.ceil(timeoutMs / 1000) }));
   });
 }

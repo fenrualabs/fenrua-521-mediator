@@ -35,8 +35,8 @@ test('pins the private capability profile to preflight-only engine access', () =
   assert.match(profile, /expected_engine_calls: 23/);
   assert.match(profile, /no raw prompt or KV persistence/);
   assert.match(profile, /native PowerShell mediator transport/);
-  assert.equal(manifest.capability_engine_baseline.status, 'BLOCKED_LOOPBACK_TRANSPORT_TIMEOUT');
-  assert.equal(manifest.capability_engine_baseline.execution.evidence_status, 'BLOCKED_LOOPBACK_TRANSPORT_TIMEOUT');
+  assert.equal(manifest.capability_engine_baseline.status, 'BLOCKED_ENGINE_OUTPUT_AND_TIMEOUT');
+  assert.equal(manifest.capability_engine_baseline.execution.evidence_status, 'BLOCKED_ENGINE_OUTPUT_AND_TIMEOUT');
   assert.equal(manifest.capability_engine_baseline.frozen_runtime_attestation.shard_count, 144);
   assert.equal(sha256(path.join(root, 'capability', 'fenrua-521-capability-engine-baseline-v0.3.yaml')), manifest.capability_engine_baseline.profile_sha256);
   assert.equal(sha256(path.join(root, 'src', 'capability-baseline.mjs')), manifest.capability_engine_baseline.runner.sha256);
@@ -45,12 +45,21 @@ test('pins the private capability profile to preflight-only engine access', () =
   const transport = fs.readFileSync(path.join(root, 'bin', 'invoke-colibri-mediator.ps1'), 'utf8');
   assert.equal(sha256(path.join(root, 'bin', 'invoke-colibri-mediator.ps1')), manifest.capability_engine_baseline.runner.native_loopback_transport_sha256);
   assert.match(transport, /http:\/\/127\.0\.0\.1:8010\/v1\/chat\/completions/);
+  assert.match(transport, /\$request\.timeout_seconds/);
+  assert.match(transport, /-TimeoutSec \$timeoutSeconds/);
+  assert.match(transport, /response_format/);
+  assert.match(transport, /enable_thinking = \$false/);
+  const runner = fs.readFileSync(path.join(root, 'src', 'capability-baseline.mjs'), 'utf8');
+  assert.match(runner, /type: 'gbnf'/);
+  assert.match(runner, /enable_thinking: false/);
   assert.doesNotMatch(transport, /Out-File|Set-Content|Add-Content|Start-Process/);
-  assert.equal(sha256(capabilityEvidencePath), manifest.capability_engine_baseline.execution.evidence.sha256);
-  const evidence = JSON.parse(fs.readFileSync(capabilityEvidencePath, 'utf8'));
+  const latestEvidencePath = path.join(root, manifest.capability_engine_baseline.execution.evidence.file);
+  assert.equal(sha256(latestEvidencePath), manifest.capability_engine_baseline.execution.evidence.sha256);
+  const evidence = JSON.parse(fs.readFileSync(latestEvidencePath, 'utf8'));
   assert.equal(evidence.evidence_package_digest, manifest.capability_engine_baseline.execution.evidence.evidence_package_digest);
   assert.equal(evidence.build_state, 'BLOCKED');
-  assert.deepEqual(evidence.results.engine_error_codes, { ENGINE_NETWORK_ERROR: 1, ENGINE_SKIPPED_AFTER_FAILURE: 22 });
+  assert.deepEqual(evidence.results.engine_error_codes, { ENGINE_NETWORK_ERROR: 1, ENGINE_OUTPUT_INVALID: 1, ENGINE_SKIPPED_AFTER_FAILURE: 21 });
+  assert.equal(manifest.capability_engine_baseline.execution.attempt_history.length, 5);
   assert.doesNotMatch(JSON.stringify(evidence), /"prompt"|CANARY-|FENRUA_COLIBRI_API_KEY/);
 });
 
